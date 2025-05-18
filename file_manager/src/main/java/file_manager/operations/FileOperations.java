@@ -1,4 +1,4 @@
-package com.file_manager.operations;
+package file_manager.operations;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,8 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 
-import com.file_manager.utils.InputUtils;
-import com.file_manager.utils.PathUtils;
+import static file_manager.utils.InputUtils.inputFunction;
+import static file_manager.utils.PathUtils.getPath;
 
 public class FileOperations {
     
@@ -22,11 +22,11 @@ public class FileOperations {
         //in case no name is given as a parameter
         if (name == null) {
             System.out.print("enter file name: ");
-            name = InputUtils.inputFunction();
+            name = inputFunction();
         }
 
         //create new file object
-        File file1 = new File(PathUtils.getPath(), name);
+        File file1 = new File(getPath(), name);
 
         try {
             //if the file did get created
@@ -48,7 +48,7 @@ public class FileOperations {
         //if no value is given in parameter
         if (file_name == null) {
             System.out.print("Enter file name: ");
-            file_name = InputUtils.inputFunction();
+            file_name = inputFunction();
         }
         
         try {
@@ -76,7 +76,7 @@ public class FileOperations {
         //if no name value is given as parameter
         if (name == null) {
             System.out.print("Enter input name: ");
-            name = InputUtils.inputFunction();
+            name = inputFunction();
         }
         
         //clear the file before deleting it
@@ -99,18 +99,18 @@ public class FileOperations {
         //if no file is given in parameters
         if (file_name == null) {
             System.out.print("Enter file name: ");
-            file_name = InputUtils.inputFunction();
+            file_name = inputFunction();
         }
         
         //if no new file name is given in parameters
         if (new_name == null) {
             System.out.print("Enter new file name: ");
-            new_name = InputUtils.inputFunction();
+            new_name = inputFunction();
         }
         
         //get the paths of the separate files  
-        String start_path = PathUtils.getPath() + "\\" + file_name;
-        String end_path = PathUtils.getPath() + "\\" + new_name;
+        String start_path = getPath() + "\\" + file_name;
+        String end_path = getPath() + "\\" + new_name;
         
         //create file objects from the paths
         File start_file = new File(start_path);
@@ -128,10 +128,11 @@ public class FileOperations {
     }
 
     public static void readFile(String file_name) {
+        StringBuilder stringBuilder = new StringBuilder();
+
         //if no file name is given as parameter
         if (file_name == null) {
             System.out.print("Enter file name: ");
-            file_name = InputUtils.inputFunction();
         }
         
         //if the file is found
@@ -143,6 +144,7 @@ public class FileOperations {
             String line;
             while((line = reader.readLine()) != null) {
                 System.out.println(line);
+                // stringBuilder.append(line);
             }
             reader.close();
         }
@@ -150,17 +152,19 @@ public class FileOperations {
         catch (Exception e) {
             System.out.println("file not found");
         }
+
+        // return stringBuilder.toString();
     }
 
     public static void writeFile(String file_name, String text) {
         if (file_name == null) {
             System.out.print("Enter file name: ");
-            file_name = InputUtils.inputFunction();
+            file_name = inputFunction();
         }
         
         if (text == null) {
             System.out.print("Enter text: ");
-            text = InputUtils.inputFunction();
+            text = inputFunction();
         }
         
         int total_lines = 0;
@@ -202,7 +206,7 @@ public class FileOperations {
         //in case no file name is given as a parameter
         if (file_name_param == null) {
             System.out.print("Enter file name: ");
-            file_name_param = InputUtils.inputFunction();
+            file_name_param = inputFunction();
         }
 
         //copy the new name to use as a object
@@ -214,7 +218,7 @@ public class FileOperations {
             String[] split_file_name_param = file_name_param.split("\\.");
                         
             //create the file object for this file 
-            File start_file_obj = new File(PathUtils.getPath(), split_file_name_param[0] + "." + split_file_name_param[1]);
+            File start_file_obj = new File(getPath(), split_file_name_param[0] + "." + split_file_name_param[1]);
             
             //count the number to give to the file copy
             int i = 1;
@@ -241,13 +245,13 @@ public class FileOperations {
                 }
                 
                 //update the file object with the new file name (with the number at the end)
-                start_file_obj = new File(PathUtils.getPath() + "\\" + new_name);
+                start_file_obj = new File(getPath() + "\\" + new_name);
                 i++;
             }
         }
         //in case copy file name is given as a parameter
         else {
-            File new_name_obj = new File(PathUtils.getPath(), new_name_param);
+            File new_name_obj = new File(getPath(), new_name_param);
             try {
                 new_name_obj.createNewFile();
             }
@@ -262,7 +266,7 @@ public class FileOperations {
         //copy the bytes from the starting file to the ending (target) file
         try {
             //create new file object
-            File end = new File(PathUtils.getPath(), new_name);
+            File end = new File(getPath(), new_name);
 
             try {
                 end.createNewFile();
@@ -272,7 +276,7 @@ public class FileOperations {
             }
             
             //create file input stream object in order to be able to copy all types of files like images 
-            FileInputStream start_file = new FileInputStream(PathUtils.getPath() + "\\" + file_name_param);
+            FileInputStream start_file = new FileInputStream(getPath() + "\\" + file_name_param);
             FileOutputStream end_file = new FileOutputStream(end);
 
             //read contents of file and write them into the new file
@@ -306,18 +310,18 @@ public class FileOperations {
         //if no file name value is given as parameter
         if (file_name == null) {
             System.out.print("Enter file name: ");
-            file_name = InputUtils.inputFunction();
+            file_name = inputFunction();
         }
         
         //if no path value is given as parameter
         if (target_path == null) {
             System.out.print("Enter path to move the file into: ");
-            target_path = InputUtils.inputFunction();
+            target_path = inputFunction();
         }
         
         try {
             //combine current file path with file name to get complete file path
-            String file_name_path = PathUtils.getPath() + "\\" + file_name;
+            String file_name_path = getPath() + "\\" + file_name;
             
             //create a path object and move files from starting path into target path
             Files.move(Paths.get(file_name_path), Paths.get(target_path + "\\" + file_name));

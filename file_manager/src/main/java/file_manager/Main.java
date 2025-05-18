@@ -1,9 +1,23 @@
-package com.file_manager;
+package file_manager;
 
-import com.file_manager.operations.DirectoryOperations;
-import com.file_manager.operations.FileOperations;
-import com.file_manager.utils.InputUtils;
-import com.file_manager.utils.PathUtils;
+import static file_manager.operations.DirectoryOperations.delDir;
+import static file_manager.operations.DirectoryOperations.listDir;
+import static file_manager.operations.DirectoryOperations.moveDir;
+import static file_manager.operations.DirectoryOperations.newDir;
+import static file_manager.operations.DirectoryOperations.renameDir;
+import static file_manager.operations.FileOperations.clearFile;
+import static file_manager.operations.FileOperations.copy;
+import static file_manager.operations.FileOperations.delFile;
+import static file_manager.operations.FileOperations.move;
+import static file_manager.operations.FileOperations.newFile;
+import static file_manager.operations.FileOperations.readFile;
+import static file_manager.operations.FileOperations.renameFile;
+import static file_manager.operations.FileOperations.writeFile;
+import static file_manager.utils.InputUtils.getCommands;
+import static file_manager.utils.InputUtils.inputFunction;
+import static file_manager.utils.PathUtils.changeDir;
+import static file_manager.utils.PathUtils.getPath;
+import static file_manager.utils.PathUtils.prevDir;
 
 public class Main {
 	// Constants for command strings
@@ -28,7 +42,7 @@ public class Main {
 
 	public static void main(String[] args) {		
 		// Show possible commands to choose from
-		InputUtils.getCommands();
+		getCommands();
 		System.out.println();
 		
 		// Initialize input handling
@@ -47,12 +61,12 @@ public class Main {
 
 	private static String getInitialInput() {
 		System.out.print("Enter input (use '>' to give multiple input values at once): ");
-		return InputUtils.inputFunction();
+		return inputFunction();
 	}
 
 	private static String getNextInput() {
 		System.out.print("Enter input (use '>' to give multiple input values at once): ");
-		return InputUtils.inputFunction();
+		return inputFunction();
 	}
 
 	private static void processInput(String input, String[] padded_input) {
@@ -80,88 +94,88 @@ public class Main {
 		switch(command) {
 			//shows the files in the given path
 			case LIST:
-				DirectoryOperations.listDir();
+				listDir();
 				break;
 
 			//shows the current path
 			case PATH:
-				System.out.println(PathUtils.getPath());
+				System.out.println(getPath());
 				break;
 
 			//shows the available commands to choose from
 			case INFO:
-				InputUtils.getCommands();
+				getCommands();
 				System.out.println();
 				break;
 
 			//change the current directory with another one
 			case CHDIR:
-				PathUtils.changeDir(padded_input[1]);
+				changeDir(padded_input[1]);
 				break;
 
 			//go one directory outside
 			case PREVDIR:
-				PathUtils.prevDir();
+				prevDir();
 				break;
 
 			//create a new file
 			case MAKE_FILE:
-				FileOperations.newFile(padded_input[1]);
+				newFile(padded_input[1]);
 				break;
 
 			//delete a file
 			case DELETE_FILE:
-				FileOperations.delFile(padded_input[1]);
+				delFile(padded_input[1]);
 				break;
 			
 			//rename a file
 			case RENAME_FILE:
-				FileOperations.renameFile(padded_input[1], padded_input[2]);
+				renameFile(padded_input[1], padded_input[2]);
 				break;
 				
 			//read a file
 			case READ_FILE:
-				FileOperations.readFile(padded_input[1]);
+				readFile(padded_input[1]);
 				break;
 				
 			//write into a file
 			case WRITE_FILE:
-				FileOperations.writeFile(padded_input[1], padded_input[2]);
+				writeFile(padded_input[1], padded_input[2]);
 				break;
 				
 			//clear a file
 			case CLEAR_FILE:
-				FileOperations.clearFile(padded_input[1]);
+				clearFile(padded_input[1]);
 				break;
 				
 			//copy a file
 			case COPY_FILE:
-				FileOperations.copy(padded_input[1], padded_input[2]);
+				copy(padded_input[1], padded_input[2]);
 				break;
 				
 			//move a file
 			case MOVE_FILE:
-				FileOperations.move(padded_input[1], padded_input[2]);
+				move(padded_input[1], padded_input[2]);
 				break;	
 				
 			//create a new directory (folder)
 			case MAKE_DIR:
-				DirectoryOperations.newDir(padded_input[1], padded_input[2]);
+				newDir(padded_input[1], padded_input[2]);
 				break;
 				
 			//delete a directory (folder)
 			case DELETE_DIR:
-				DirectoryOperations.delDir(padded_input[1]);
+				delDir(padded_input[1]);
 				break;
 				
 			//rename a directory / folder
 			case RENAME_DIR:
-				DirectoryOperations.renameDir(padded_input[1], padded_input[2]);
+				renameDir(padded_input[1], padded_input[2]);
 				break;
 				
 			//move a folder to another path / location
 			case MOVE_DIR:
-				DirectoryOperations.moveDir(padded_input[1], padded_input[2]);
+				moveDir(padded_input[1], padded_input[2]);
 				break;
 		}
 	}

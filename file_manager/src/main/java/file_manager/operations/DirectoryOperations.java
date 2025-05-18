@@ -1,4 +1,4 @@
-package com.file_manager.operations;
+package file_manager.operations;
 
 import java.io.File;
 import java.nio.file.FileAlreadyExistsException;
@@ -7,8 +7,8 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import com.file_manager.utils.InputUtils;
-import com.file_manager.utils.PathUtils;
+import static file_manager.utils.InputUtils.inputFunction;
+import static file_manager.utils.PathUtils.getPath;
 
 public class DirectoryOperations {
     public static void listDir() {
@@ -25,16 +25,16 @@ public class DirectoryOperations {
     public static void newDir(String dir_name, String path) {
         if (path == null) {
             System.out.print("Enter path: ");
-            path = InputUtils.inputFunction();
+            path = inputFunction();
         }
 
         if (path.equals("current")) {
-            path = PathUtils.getPath();
+            path = getPath();
         }
         
         if(dir_name == null) {
             System.out.print("enter folder name: ");
-            dir_name = InputUtils.inputFunction();
+            dir_name = inputFunction();
         }
         
         char path_last_char = path.charAt(path.length()-1);
@@ -57,7 +57,7 @@ public class DirectoryOperations {
     public static void delDir(String path) {
         if (path == null) {
             System.out.print("enter path to folder to delete: ");
-            path = InputUtils.inputFunction();
+            path = inputFunction();
         }
         try {
             //create a file object from the folder_name 
@@ -93,22 +93,22 @@ public class DirectoryOperations {
         //if no value is given for starting folder path (original folder name / path)
         if(starting_string == null) {
             System.out.print("enter starting folder name: ");
-            starting_string = InputUtils.inputFunction();
+            starting_string = inputFunction();
         }
         
         //if no value is given for target path (new name of the folder/directory)
         if(target_string == null) {
             System.out.print("enter target folder name: ");
-            target_string = InputUtils.inputFunction();
+            target_string = inputFunction();
         }
         
         //turn the string inputs into path objects
-        Path starting_path = Paths.get(PathUtils.getPath() + "\\" + starting_string);
-        Path target_path = Paths.get(PathUtils.getPath() + "\\" + target_string);
+        Path starting_path = Paths.get(getPath() + "\\" + starting_string);
+        Path target_path = Paths.get(getPath() + "\\" + target_string);
 
         //create file objects from the paths
-        File starting_path_file = new File(PathUtils.getPath() + "\\" + starting_string);
-        File target_path_file = new File(PathUtils.getPath() + "\\" + target_string);
+        File starting_path_file = new File(getPath() + "\\" + starting_string);
+        File target_path_file = new File(getPath() + "\\" + target_string);
         
         //if the starting folder name exists and the target folder name doesnt exist
         if ((starting_path_file.exists() == true) && (target_path_file.exists() == false)) {
@@ -134,13 +134,13 @@ public class DirectoryOperations {
         //in case no starting path name is given as parameter
         if(starting_path == null) {
             System.out.print("enter starting path: ");
-            starting_path = InputUtils.inputFunction();
+            starting_path = inputFunction();
         }
         
         //in case no target path name is given as a parameter
         if(target_path == null) {
             System.out.print("enter target path: ");
-            target_path = InputUtils.inputFunction();
+            target_path = inputFunction();
         }
         
         String[] split_starting_path = starting_path.split("/");

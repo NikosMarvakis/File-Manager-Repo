@@ -10,7 +10,7 @@ The project is organized into the following packages:
   - `FileOperations.java`: Handles file-related operations (create, delete, rename, read, write, copy, move)
   - `DirectoryOperations.java`: Handles directory-related operations (create, delete, rename, move, list)
 - `File_Editor.utils`: Contains utility classes
-  - `PathUtils.java`: Handles path-related operations
+  - `java`: Handles path-related operations
   - `InputUtils.java`: Handles user input and command listing
 - `File_Editor.tests`: Contains unit tests
   - `FileOperationsTest.java`: Tests for file operations

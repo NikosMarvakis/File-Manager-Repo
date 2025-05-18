@@ -1,11 +1,13 @@
-package File_Editor.tests;
+package file_manager.tests;
 
 import org.junit.Test;
+
+import static file_manager.operations.FileOperations.readFile;
 import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
-import File_Editor.operations.FileOperations;
-import File_Editor.utils.PathUtils;
+import file_manager.operations.FileOperations;
+import file_manager.utils.PathUtils;
 
 public class FileOperationsTest {
     
@@ -36,7 +38,8 @@ public class FileOperationsTest {
         // Read the file content
         File file = new File(PathUtils.getPath(), testFileName);
         assertTrue("File should exist", file.exists());
-        
+        // assertEquals(void, readFile(testFileName));
+
         // Clean up
         file.delete();
     }

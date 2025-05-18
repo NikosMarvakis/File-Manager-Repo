@@ -1,4 +1,4 @@
-package com.file_manager.utils;
+package file_manager.utils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
