@@ -11,7 +11,7 @@ public class PathUtils {
         return System.getProperty("user.dir");
     }
 
-    public static void changeDir(String path) {
+    public static String changeDir(String path) {
         //if path value is not given as parameter
         if (path == null) {
             System.out.print("Enter path: ");
@@ -25,6 +25,7 @@ public class PathUtils {
             //check if directory exists
             if (Files.isDirectory(path1) == true) {
                 System.setProperty("user.dir", path1.toString());
+                return path1.toString();
             }
             else {
                 System.out.println("directory not existing");
@@ -33,6 +34,7 @@ public class PathUtils {
         catch(java.nio.file.InvalidPathException ipe) {
             System.out.println("invalid path");
         }
+        return null;
     }
 
     public static void prevDir() {

@@ -11,6 +11,8 @@ import static file_manager.utils.InputUtils.inputFunction;
 import static file_manager.utils.PathUtils.getPath;
 
 public class DirectoryOperations {
+
+    // Function to list the current directory the user is in
     public static void listDir() {
         //create file object
         File f = new File(System.getProperty("user.dir"));
@@ -22,21 +24,26 @@ public class DirectoryOperations {
         }
     }
 
-    public static void newDir(String dir_name, String path) {
+    // Function to create a new directory / folder
+    public static boolean newDir(String dir_name, String path) {
+        // Prompt user for path if not provided
         if (path == null) {
             System.out.print("Enter path: ");
             path = inputFunction();
         }
 
+        // Use current directory if specified
         if (path.equals("current")) {
             path = getPath();
         }
         
+        // Prompt user for directory name if not provided
         if(dir_name == null) {
             System.out.print("enter folder name: ");
             dir_name = inputFunction();
         }
         
+        // Ensure path ends with a slash
         char path_last_char = path.charAt(path.length()-1);
         if (!(path_last_char == '/')) {
             path = path + '/';
@@ -48,13 +55,17 @@ public class DirectoryOperations {
         //check if the folder name already exists and create the folder if not 
         if (!(folder.exists())) {
             folder.mkdir();
+            return true;
         }
         else {
             System.out.println("folder name already exists");
+            return false;
         }
     }
 
-    public static void delDir(String path) {
+    // Function to delete a directory / folder
+    public static boolean delDir(String path) {
+        // Prompt user for path if not provided
         if (path == null) {
             System.out.print("enter path to folder to delete: ");
             path = inputFunction();
@@ -62,7 +73,7 @@ public class DirectoryOperations {
         try {
             //create a file object from the folder_name 
             File folder = new File(path);
-                        
+
             String[] folder_list = folder.list();
 
             //check if the folder is empty
@@ -80,6 +91,8 @@ public class DirectoryOperations {
             }
             //in case the folder is empty
             folder.delete();
+
+            return true;
         }
         catch(NullPointerException npe) {
             System.out.println("folder name must be given as a path");
@@ -87,8 +100,10 @@ public class DirectoryOperations {
         catch(Exception e) {
             System.out.println(e);
         }
+        return false;
     }
 
+    // Function to rename a directory / folder
     public static void renameDir(String starting_string, String target_string) {
         //if no value is given for starting folder path (original folder name / path)
         if(starting_string == null) {
@@ -130,6 +145,7 @@ public class DirectoryOperations {
         }
     }
 
+    // Function to move a directory / folder to a new location
     public static void moveDir(String starting_path, String target_path) {
         //in case no starting path name is given as parameter
         if(starting_path == null) {

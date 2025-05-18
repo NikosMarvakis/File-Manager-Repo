@@ -18,6 +18,7 @@ import static file_manager.utils.PathUtils.getPath;
 
 public class FileOperations {
     
+    // Function to create a new file
     public static void newFile(String name) {
         //in case no name is given as a parameter
         if (name == null) {
@@ -44,6 +45,7 @@ public class FileOperations {
         }
     }
 
+    // Function to clear the contents of a selected file
     public static void clearFile(String file_name) {
         //if no value is given in parameter
         if (file_name == null) {
@@ -72,7 +74,8 @@ public class FileOperations {
         }
     }
     
-    public static void delFile(String name) {
+    // Function to delete a file after clearing its contents
+    public static boolean delFile(String name) {
         //if no name value is given as parameter
         if (name == null) {
             System.out.print("Enter input name: ");
@@ -88,13 +91,17 @@ public class FileOperations {
         //if the got deleted
         if (f.delete() == true) {
             System.out.println("File deleted");
+            return true;
         }
         //if the file did not get deleted
         else {
             System.out.println("failed to delete file");
+
+            return false;
         }
     }
 
+    // Function to rename a file to a new name
     public static void renameFile(String file_name, String new_name) {
         //if no file is given in parameters
         if (file_name == null) {
@@ -127,7 +134,8 @@ public class FileOperations {
         }
     }
 
-    public static void readFile(String file_name) {
+    // Function to read and print the contents of a file
+    public static String readFile(String file_name) {
         StringBuilder stringBuilder = new StringBuilder();
 
         //if no file name is given as parameter
@@ -144,7 +152,7 @@ public class FileOperations {
             String line;
             while((line = reader.readLine()) != null) {
                 System.out.println(line);
-                // stringBuilder.append(line);
+                stringBuilder.append(line);
             }
             reader.close();
         }
@@ -153,9 +161,10 @@ public class FileOperations {
             System.out.println("file not found");
         }
 
-        // return stringBuilder.toString();
+        return stringBuilder.toString();
     }
 
+    // Function to write text into a given file
     public static void writeFile(String file_name, String text) {
         if (file_name == null) {
             System.out.print("Enter file name: ");
@@ -202,6 +211,7 @@ public class FileOperations {
         }
     }
 
+    // Function to copy a file to a new file, handling name conflicts
     public static String copy(String file_name_param, String new_name_param) {
         //in case no file name is given as a parameter
         if (file_name_param == null) {
@@ -306,6 +316,7 @@ public class FileOperations {
         return new_name;
     }
 
+    // Function to move a file to a new directory, handling name conflicts
     public static void move(String file_name, String target_path) {
         //if no file name value is given as parameter
         if (file_name == null) {

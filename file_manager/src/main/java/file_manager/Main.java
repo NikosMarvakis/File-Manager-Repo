@@ -46,7 +46,7 @@ public class Main {
 		System.out.println();
 		
 		// Initialize input handling
-		String input = getInitialInput();
+		String input = getInput();
 		String[] padded_input = new String[4];  // Array for command parameters
 
 		// Main program loop
@@ -55,19 +55,20 @@ public class Main {
 			processInput(input, padded_input);
 			
 			// Get next input
-			input = getNextInput();
+			input = getInput();
 		}
 	}
 
-	private static String getInitialInput() {
+	// Function to get the user input
+	private static String getInput() {
 		System.out.print("Enter input (use '>' to give multiple input values at once): ");
 		return inputFunction();
 	}
 
-	private static String getNextInput() {
-		System.out.print("Enter input (use '>' to give multiple input values at once): ");
-		return inputFunction();
-	}
+	// private static String getNextInput() {
+	// 	System.out.print("Enter input (use '>' to give multiple input values at once): ");
+	// 	return inputFunction();
+	// }
 
 	private static void processInput(String input, String[] padded_input) {
 		// Split and clean input

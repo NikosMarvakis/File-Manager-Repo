@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class InputUtils {
     
+    // Function to handle the user input from the Command line
     public static String inputFunction() {
         //create scanner object
         Scanner scan_obj = new Scanner(System.in); 
@@ -12,6 +13,7 @@ public class InputUtils {
         return user_input;        
     }
 
+    // Function to show the menu of possible supported options
     public static void getCommands() {
         String[] commands = new String[] {
             "exit", "list", "path", "info",
