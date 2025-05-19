@@ -10,9 +10,21 @@ import java.nio.file.Paths;
 import static file_manager.utils.InputUtils.inputFunction;
 import static file_manager.utils.PathUtils.getPath;
 
+/**
+ * Utility class for handling directory operations in the File Manager application.
+ * This class provides methods for managing directories, including listing contents,
+ * creating, deleting, renaming, and moving directories.
+ *
+ * @author Nikolaos Marvakis
+ * @version 1.0
+ */
 public class DirectoryOperations {
 
-    // Function to list the current directory the user is in
+    /**
+     * Lists all files and directories in the current working directory.
+     * This method retrieves the current directory path and prints the names
+     * of all files and subdirectories contained within it.
+     */
     public static void listDir() {
         //create file object
         File f = new File(System.getProperty("user.dir"));
@@ -24,7 +36,17 @@ public class DirectoryOperations {
         }
     }
 
-    // Function to create a new directory / folder
+    /**
+     * Creates a new directory at the specified path.
+     * If the path is not provided, the user will be prompted to enter it.
+     * If the directory name is not provided, the user will be prompted to enter it.
+     * The method ensures the path ends with a slash and checks for existing directories
+     * to prevent duplicates.
+     *
+     * @param dir_name The name of the directory to create
+     * @param path The path where the directory should be created. Use "current" for current directory
+     * @return true if the directory was created successfully, false otherwise
+     */
     public static boolean newDir(String dir_name, String path) {
         // Prompt user for path if not provided
         if (path == null) {
@@ -63,7 +85,16 @@ public class DirectoryOperations {
         }
     }
 
-    // Function to delete a directory / folder
+    /**
+     * Deletes a directory and all its contents recursively.
+     * If the path is not provided, the user will be prompted to enter it.
+     * The method handles both empty and non-empty directories, deleting all
+     * files and subdirectories within the target directory.
+     *
+     * @param path The path of the directory to delete
+     * @return true if the directory was deleted successfully, false otherwise
+     * @throws NullPointerException if the path is invalid
+     */
     public static boolean delDir(String path) {
         // Prompt user for path if not provided
         if (path == null) {
@@ -103,7 +134,15 @@ public class DirectoryOperations {
         return false;
     }
 
-    // Function to rename a directory / folder
+    /**
+     * Renames a directory to a new name.
+     * If either the source or target name is not provided, the user will be prompted to enter it.
+     * The method checks for the existence of both source and target directories
+     * to prevent errors and duplicates.
+     *
+     * @param starting_string The current name/path of the directory
+     * @param target_string The new name/path for the directory
+     */
     public static void renameDir(String starting_string, String target_string) {
         //if no value is given for starting folder path (original folder name / path)
         if(starting_string == null) {
@@ -145,7 +184,17 @@ public class DirectoryOperations {
         }
     }
 
-    // Function to move a directory / folder to a new location
+    /**
+     * Moves a directory from one location to another.
+     * If either the source or target path is not provided, the user will be prompted to enter it.
+     * The method preserves the original directory name in the new location and handles
+     * various error conditions such as non-existent paths or duplicate directories.
+     *
+     * @param starting_path The current path of the directory
+     * @param target_path The destination path where the directory should be moved
+     * @throws NoSuchFileException if the source path does not exist
+     * @throws FileAlreadyExistsException if a directory with the same name exists at the target path
+     */
     public static void moveDir(String starting_path, String target_path) {
         //in case no starting path name is given as parameter
         if(starting_path == null) {

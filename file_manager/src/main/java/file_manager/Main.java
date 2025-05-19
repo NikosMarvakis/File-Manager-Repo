@@ -19,6 +19,15 @@ import static file_manager.utils.PathUtils.changeDir;
 import static file_manager.utils.PathUtils.getPath;
 import static file_manager.utils.PathUtils.prevDir;
 
+/**
+ * The Main class serves as the entry point for the File Manager application.
+ * This application provides a command-line interface for managing files and directories,
+ * offering various operations such as creating, reading, writing, moving, and deleting files
+ * and directories.
+ *
+ * @author Nikolaos Marvakis
+ * @version 1.0
+ */
 public class Main {
 	// Constants for command strings
 	private static final String EXIT = "exit";
@@ -40,6 +49,29 @@ public class Main {
 	private static final String RENAME_DIR = "rename dir";
 	private static final String MOVE_DIR = "move dir";
 
+
+	/**
+	 * @param args
+	 * @author Nikolaos Marvakis
+	 * @version 1.0
+	 * <p>This App is designed to manage different File, Directory and Path functions<p>
+	 */
+
+	/**
+	 * The entry point of the File Manager application.
+	 * <p>
+	 * This method initializes the application and enters a command processing loop.
+	 * It displays available commands and continuously processes user input until
+	 * the exit command is received. The application supports various file and directory
+	 * operations through a simple command-line interface.
+	 * </p>
+	 * <p>
+	 * The input format supports multiple parameters separated by '>' character,
+	 * allowing for complex operations with multiple arguments.
+	 * </p>
+	 *
+	 * @param args Command-line arguments (not used in this application)
+	 */
 	public static void main(String[] args) {		
 		// Show possible commands to choose from
 		getCommands();
@@ -59,17 +91,32 @@ public class Main {
 		}
 	}
 
-	// Function to get the user input
+	/**
+	 * Prompts the user for input and retrieves the entered command.
+	 * <p>
+	 * This method displays a prompt message indicating that multiple input values
+	 * can be provided using the '>' character as a separator. It delegates the actual
+	 * input retrieval to the inputFunction() method.
+	 * </p>
+	 *
+	 * @return String containing the user's input command and parameters
+	 */
 	private static String getInput() {
 		System.out.print("Enter input (use '>' to give multiple input values at once): ");
 		return inputFunction();
 	}
 
-	// private static String getNextInput() {
-	// 	System.out.print("Enter input (use '>' to give multiple input values at once): ");
-	// 	return inputFunction();
-	// }
-
+	/**
+	 * Processes the user input by splitting it into command and parameters.
+	 * <p>
+	 * This method takes the raw input string, splits it into components using the '>'
+	 * delimiter, and prepares it for command execution. It handles up to 4 parameters
+	 * for each command.
+	 * </p>
+	 *
+	 * @param input The raw input string from the user
+	 * @param padded_input Array to store the processed command and parameters
+	 */
 	private static void processInput(String input, String[] padded_input) {
 		// Split and clean input
 		String[] split_input = input.split(">");
@@ -89,6 +136,22 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Executes the command based on the processed input parameters.
+	 * <p>
+	 * This method interprets the command and its parameters, then performs the
+	 * corresponding file or directory operation. It supports various operations
+	 * including:
+	 * </p>
+	 * <ul>
+	 *     <li>File operations: create, delete, rename, read, write, clear, copy, move</li>
+	 *     <li>Directory operations: create, delete, rename, move</li>
+	 *     <li>Path operations: list contents, show current path, change directory</li>
+	 *     <li>System operations: show available commands, exit application</li>
+	 * </ul>
+	 *
+	 * @param padded_input Array containing the command and its parameters
+	 */
 	private static void executeCommand(String[] padded_input) {
 		String command = padded_input[0];
 		

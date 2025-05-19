@@ -16,9 +16,24 @@ import java.nio.file.Paths;
 import static file_manager.utils.InputUtils.inputFunction;
 import static file_manager.utils.PathUtils.getPath;
 
+/**
+ * Utility class for handling file operations in the File Manager application.
+ * This class provides comprehensive methods for managing files, including creating,
+ * reading, writing, clearing, deleting, renaming, copying, and moving files.
+ * The class handles various file operations with proper error handling and user input validation.
+ *
+ * @author Nikolaos Marvakis
+ * @version 1.0
+ */
 public class FileOperations {
     
-    // Function to create a new file
+    /**
+     * Creates a new file with the specified name in the current directory.
+     * If no name is provided, the user will be prompted to enter one.
+     * The method checks for existing files to prevent duplicates.
+     *
+     * @param name The name of the file to create
+     */
     public static void newFile(String name) {
         //in case no name is given as a parameter
         if (name == null) {
@@ -45,7 +60,13 @@ public class FileOperations {
         }
     }
 
-    // Function to clear the contents of a selected file
+    /**
+     * Clears all contents from a specified file while preserving the file itself.
+     * If no file name is provided, the user will be prompted to enter one.
+     * The method verifies the file's existence before attempting to clear it.
+     *
+     * @param file_name The name of the file to clear
+     */
     public static void clearFile(String file_name) {
         //if no value is given in parameter
         if (file_name == null) {
@@ -74,7 +95,14 @@ public class FileOperations {
         }
     }
     
-    // Function to delete a file after clearing its contents
+    /**
+     * Deletes a file after clearing its contents.
+     * If no file name is provided, the user will be prompted to enter one.
+     * The method first clears the file's contents before deletion.
+     *
+     * @param name The name of the file to delete
+     * @return true if the file was successfully deleted, false otherwise
+     */
     public static boolean delFile(String name) {
         //if no name value is given as parameter
         if (name == null) {
@@ -101,7 +129,14 @@ public class FileOperations {
         }
     }
 
-    // Function to rename a file to a new name
+    /**
+     * Renames a file to a new name.
+     * If either the current or new name is not provided, the user will be prompted to enter them.
+     * The method verifies the existence of the source file and checks for name conflicts.
+     *
+     * @param file_name The current name of the file
+     * @param new_name The new name for the file
+     */
     public static void renameFile(String file_name, String new_name) {
         //if no file is given in parameters
         if (file_name == null) {
@@ -134,7 +169,14 @@ public class FileOperations {
         }
     }
 
-    // Function to read and print the contents of a file
+    /**
+     * Reads and prints the contents of a file.
+     * If no file name is provided, the user will be prompted to enter one.
+     * The method reads the file line by line and returns the contents as a string.
+     *
+     * @param file_name The name of the file to read
+     * @return String containing the contents of the file
+     */
     public static String readFile(String file_name) {
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -164,7 +206,14 @@ public class FileOperations {
         return stringBuilder.toString();
     }
 
-    // Function to write text into a given file
+    /**
+     * Writes text to a file, appending to existing content.
+     * If either the file name or text is not provided, the user will be prompted to enter them.
+     * The method handles new line insertion between existing content and new text.
+     *
+     * @param file_name The name of the file to write to
+     * @param text The text to write to the file
+     */
     public static void writeFile(String file_name, String text) {
         if (file_name == null) {
             System.out.print("Enter file name: ");
@@ -211,7 +260,17 @@ public class FileOperations {
         }
     }
 
-    // Function to copy a file to a new file, handling name conflicts
+    /**
+     * Creates a copy of a file with automatic name conflict resolution.
+     * If no target name is provided, the method generates a unique name by appending a number.
+     * The method handles various file types and preserves the original file extension.
+     *
+     * @param file_name_param The name of the file to copy
+     * @param new_name_param The desired name for the copy (optional)
+     * @return String containing the name of the created copy
+     * @throws FileNotFoundException if the source file cannot be found
+     * @throws InvalidPathException if the target path is invalid
+     */
     public static String copy(String file_name_param, String new_name_param) {
         //in case no file name is given as a parameter
         if (file_name_param == null) {
@@ -316,7 +375,16 @@ public class FileOperations {
         return new_name;
     }
 
-    // Function to move a file to a new directory, handling name conflicts
+    /**
+     * Moves a file to a new directory, handling name conflicts.
+     * If either the file name or target path is not provided, the user will be prompted to enter them.
+     * In case of name conflicts, the method creates a copy with a unique name.
+     *
+     * @param file_name The name of the file to move
+     * @param target_path The destination directory path
+     * @throws NoSuchFileException if the source file or target path does not exist
+     * @throws FileAlreadyExistsException if a file with the same name exists in the target directory
+     */
     public static void move(String file_name, String target_path) {
         //if no file name value is given as parameter
         if (file_name == null) {
