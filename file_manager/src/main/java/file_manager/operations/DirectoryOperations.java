@@ -50,7 +50,7 @@ public class DirectoryOperations {
     public static boolean newDir(String dir_name, String path) {
         // Prompt user for path if not provided
         if (path == null) {
-            System.out.print("Enter path: ");
+            System.out.print("Enter path (or \"current\"): ");
             path = inputFunction();
         }
 

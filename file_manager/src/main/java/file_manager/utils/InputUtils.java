@@ -32,7 +32,7 @@ public class InputUtils {
 
     /**
      * Displays a formatted menu of all available commands in the File Manager application.
-     * The commands are displayed in a table format with three columns and a width of 20 characters each.
+     * The commands are displayed in a table format.
      * The menu is surrounded by separator lines for better visibility.
      * 
      * Available commands include:

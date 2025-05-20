@@ -11,9 +11,6 @@ import java.nio.file.Paths;
  * - Changing directories
  * - Navigating to parent directories
  * 
- * This class is designed to work with the Java NIO file system API to provide
- * robust and platform-independent path handling.
- *
  * @author Nikolaos Marvakis
  * @version 1.0
  */
@@ -75,10 +72,6 @@ public class PathUtils {
      * 2. Splitting it into components
      * 3. Removing the last component
      * 4. Reconstructing the path to the parent directory
-     *
-     * Example:
-     * Current path: "/home/user/documents"
-     * After prevDir(): "/home/user"
      */
     public static void prevDir() {
         //split the initial directory into separate parts, split (\) values
