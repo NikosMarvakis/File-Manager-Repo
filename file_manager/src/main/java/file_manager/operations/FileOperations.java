@@ -27,6 +27,8 @@ import static file_manager.utils.PathUtils.getPath;
  */
 public class FileOperations {
     
+    DirectoryOperations dir = new DirectoryOperations();
+
     /**
      * Creates a new file with the specified name in the current directory.
      * If no name is provided, the user will be prompted to enter one.
@@ -137,7 +139,7 @@ public class FileOperations {
      * @param file_name The current name of the file
      * @param new_name The new name for the file
      */
-    public static void renameFile(String file_name, String new_name) {
+    public void renameFile(String file_name, String new_name) {
         //if no file is given in parameters
         if (file_name == null) {
             System.out.print("Enter file name: ");
@@ -151,8 +153,9 @@ public class FileOperations {
         }
         
         //get the paths of the separate files  
-        String start_path = getPath() + "\\" + file_name;
-        String end_path = getPath() + "\\" + new_name;
+        String delimiter = dir.getPathDelimiter();
+        String start_path = getPath() + delimiter + file_name;
+        String end_path = getPath() + delimiter + new_name;
         
         //create file objects from the paths
         File start_file = new File(start_path);
@@ -271,7 +274,7 @@ public class FileOperations {
      * @throws FileNotFoundException if the source file cannot be found
      * @throws InvalidPathException if the target path is invalid
      */
-    public static String copy(String file_name_param, String new_name_param) {
+    public String copy(String file_name_param, String new_name_param) {
         //in case no file name is given as a parameter
         if (file_name_param == null) {
             System.out.print("Enter file name: ");
@@ -280,6 +283,7 @@ public class FileOperations {
 
         //copy the new name to use as a object
         String new_name = new_name_param;
+        String delimiter = dir.getPathDelimiter();
         
         //in case no name is given for the copy file
         if (new_name_param == null){
@@ -314,7 +318,7 @@ public class FileOperations {
                 }
                 
                 //update the file object with the new file name (with the number at the end)
-                start_file_obj = new File(getPath() + "\\" + new_name);
+                start_file_obj = new File(getPath() + delimiter + new_name);
                 i++;
             }
         }
@@ -345,7 +349,7 @@ public class FileOperations {
             }
             
             //create file input stream object in order to be able to copy all types of files like images 
-            FileInputStream start_file = new FileInputStream(getPath() + "\\" + file_name_param);
+            FileInputStream start_file = new FileInputStream(getPath() + delimiter + file_name_param);
             FileOutputStream end_file = new FileOutputStream(end);
 
             //read contents of file and write them into the new file
@@ -385,7 +389,7 @@ public class FileOperations {
      * @throws NoSuchFileException if the source file or target path does not exist
      * @throws FileAlreadyExistsException if a file with the same name exists in the target directory
      */
-    public static void move(String file_name, String target_path) {
+    public void move(String file_name, String target_path) {
         //if no file name value is given as parameter
         if (file_name == null) {
             System.out.print("Enter file name: ");
@@ -398,12 +402,13 @@ public class FileOperations {
             target_path = inputFunction();
         }
         
+        String delimiter = dir.getPathDelimiter();
         try {
             //combine current file path with file name to get complete file path
-            String file_name_path = getPath() + "\\" + file_name;
+            String file_name_path = getPath() + delimiter + file_name;
             
             //create a path object and move files from starting path into target path
-            Files.move(Paths.get(file_name_path), Paths.get(target_path + "\\" + file_name));
+            Files.move(Paths.get(file_name_path), Paths.get(target_path + delimiter + file_name));
         }
         catch(java.nio.file.NoSuchFileException nsfe) {
             System.out.println("file or path not found error");

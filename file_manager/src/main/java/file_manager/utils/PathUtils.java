@@ -4,6 +4,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import file_manager.operations.DirectoryOperations;
+
 /**
  * PathUtils is a utility class that provides essential path management functionality for the File Manager application.
  * It handles all directory-related operations including:
@@ -15,7 +17,9 @@ import java.nio.file.Paths;
  * @version 1.0
  */
 public class PathUtils {
-    
+    // Create an instance of DirectoryOperations
+    private static final DirectoryOperations dirOps = new DirectoryOperations();
+
     /**
      * Retrieves and returns the absolute path of the current working directory.
      * This method uses System.getProperty("user.dir") to get the current directory
@@ -74,13 +78,13 @@ public class PathUtils {
      * 4. Reconstructing the path to the parent directory
      */
     public static void prevDir() {
-        //split the initial directory into separate parts, split (\) values
-        String[] current_dir_split = getPath().toString().split("\\\\");
+        //split the initial directory into separate parts, split using delimiter from DirectoryOperations
+        String[] current_dir_split = getPath().toString().split(dirOps.getPathDelimiter());
         
         StringBuilder new_path = new StringBuilder();
         //reconnect the previously split parts into new path without the last part
         for (int i = 0; i < current_dir_split.length - 1; i++) {
-            new_path.append(current_dir_split[i] + "/");
+            new_path.append(current_dir_split[i] + dirOps.getPathDelimiter());
         }
         changeDir(new_path.toString());
     }

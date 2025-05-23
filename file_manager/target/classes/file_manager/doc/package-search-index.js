@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"file_manager"},{"l":"file_manager.operations"},{"l":"file_manager.utils"}];updateSearchResults();

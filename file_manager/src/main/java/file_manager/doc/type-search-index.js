@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"file_manager.operations","l":"DirectoryOperations"},{"p":"file_manager.operations","l":"FileOperations"},{"p":"file_manager.utils","l":"InputUtils"},{"p":"file_manager","l":"Main"},{"p":"file_manager.utils","l":"PathUtils"}];updateSearchResults();

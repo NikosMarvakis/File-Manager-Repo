@@ -20,6 +20,21 @@ import static file_manager.utils.PathUtils.getPath;
  */
 public class DirectoryOperations {
 
+    private String pathDelimiter;
+
+    public DirectoryOperations() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            pathDelimiter = "\\";
+        } else {
+            pathDelimiter = "/";
+        }
+    }
+
+    public String getPathDelimiter() {
+        return pathDelimiter;
+    }
+
     /**
      * Lists all files and directories in the current working directory.
      * This method retrieves the current directory path and prints the names
@@ -48,6 +63,8 @@ public class DirectoryOperations {
      * @return true if the directory was created successfully, false otherwise
      */
     public static boolean newDir(String dir_name, String path) {
+        DirectoryOperations ops = new DirectoryOperations();
+
         // Prompt user for path if not provided
         if (path == null) {
             System.out.print("Enter path (or \"current\"): ");
@@ -65,10 +82,10 @@ public class DirectoryOperations {
             dir_name = inputFunction();
         }
         
-        // Ensure path ends with a slash
+        // Ensure path ends with a delimiter
         char path_last_char = path.charAt(path.length()-1);
-        if (!(path_last_char == '/')) {
-            path = path + '/';
+        if (!(path_last_char == ops.getPathDelimiter().charAt(0))) {
+            path = path + ops.getPathDelimiter();
         }
         
         //create new file object
@@ -144,6 +161,8 @@ public class DirectoryOperations {
      * @param target_string The new name/path for the directory
      */
     public static void renameDir(String starting_string, String target_string) {
+        DirectoryOperations ops = new DirectoryOperations();
+
         //if no value is given for starting folder path (original folder name / path)
         if(starting_string == null) {
             System.out.print("enter starting folder name: ");
@@ -157,12 +176,12 @@ public class DirectoryOperations {
         }
         
         //turn the string inputs into path objects
-        Path starting_path = Paths.get(getPath() + "\\" + starting_string);
-        Path target_path = Paths.get(getPath() + "\\" + target_string);
+        Path starting_path = Paths.get(getPath() + ops.getPathDelimiter() + starting_string);
+        Path target_path = Paths.get(getPath() + ops.getPathDelimiter() + target_string);
 
         //create file objects from the paths
-        File starting_path_file = new File(getPath() + "\\" + starting_string);
-        File target_path_file = new File(getPath() + "\\" + target_string);
+        File starting_path_file = new File(getPath() + ops.getPathDelimiter() + starting_string);
+        File target_path_file = new File(getPath() + ops.getPathDelimiter() + target_string);
         
         //if the starting folder name exists and the target folder name doesnt exist
         if ((starting_path_file.exists() == true) && (target_path_file.exists() == false)) {
@@ -196,6 +215,8 @@ public class DirectoryOperations {
      * @throws FileAlreadyExistsException if a directory with the same name exists at the target path
      */
     public static void moveDir(String starting_path, String target_path) {
+        DirectoryOperations ops = new DirectoryOperations();
+
         //in case no starting path name is given as parameter
         if(starting_path == null) {
             System.out.print("enter starting path: ");
@@ -208,10 +229,10 @@ public class DirectoryOperations {
             target_path = inputFunction();
         }
         
-        String[] split_starting_path = starting_path.split("/");
+        String[] split_starting_path = starting_path.split("[/\\\\]");
         String starting_folder_name = split_starting_path[split_starting_path.length - 1];
 
-        target_path = target_path + "\\" + starting_folder_name;
+        target_path = target_path + ops.getPathDelimiter() + starting_folder_name;
 
         //create path objects
         Path starting_path_obj = Paths.get(starting_path);
