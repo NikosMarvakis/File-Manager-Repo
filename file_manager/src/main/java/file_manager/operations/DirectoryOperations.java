@@ -62,19 +62,10 @@ public class DirectoryOperations {
      * @param path The path where the directory should be created. Use "current" for current directory
      * @return true if the directory was created successfully, false otherwise
      */
-    public static boolean newDir(String dir_name, String path) {
+    public static boolean newDir(String dir_name) {
         DirectoryOperations ops = new DirectoryOperations();
 
-        // Prompt user for path if not provided
-        if (path == null) {
-            System.out.print("Enter path (or \"current\"): ");
-            path = inputFunction();
-        }
-
-        // Use current directory if specified
-        if (path.equals("current")) {
-            path = getPath();
-        }
+        String path = getPath();
         
         // Prompt user for directory name if not provided
         if(dir_name == null) {
@@ -118,27 +109,83 @@ public class DirectoryOperations {
             System.out.print("enter path to folder to delete: ");
             path = inputFunction();
         }
+
+        DirectoryOperations ops = new DirectoryOperations();
+        String delimiter = ops.getPathDelimiter();
+
+        File folder = null;
+
+        // Check if the delimiter is present in the path
+        if (path.contains(delimiter)) {
+            folder = new File(path);
+        } else {
+            // Check if a folder with the given name exists in the current directory
+            File currentDir = new File(getPath());
+            File[] files = currentDir.listFiles();
+            boolean found = false;
+            if (files != null) {
+                for (File f : files) {
+                    if (f.isDirectory() && f.getName().equals(path)) {
+                        folder = f;
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            // If not found, check if the path is a valid directory path
+            if (!found) {
+                File possibleDir = new File(path);
+                if (possibleDir.exists() && possibleDir.isDirectory()) {
+                    folder = possibleDir;
+                }
+            }
+        }
+
+        // If folder is still null, path is invalid
+        if (folder == null) {
+            System.out.println("The specified path does not exist or is not a directory.");
+            return false;
+        }
+
         try {
-            //create a file object from the folder_name 
-            File folder = new File(path);
+            // Check if the folder exists and is a directory
+            if (!folder.exists()) {
+                System.out.println("The specified path does not exist.");
+                return false;
+            }
+            if (!folder.isDirectory()) {
+                System.out.println("The specified path is not a directory.");
+                return false;
+            }
 
             String[] folder_list = folder.list();
 
-            //check if the folder is empty
-            if(folder_list.length > 1) {
-                //loop for each file in the selected folder
-                for(File file : folder.listFiles()) {
-                    //check if the selected file is a folder or not
-                    if (file.isDirectory() == true) {
-                        //call the same function but change path to the inside folder
-                        delDir(file.toString());
+            // Check if the folder list is not null and not empty
+            if (folder_list != null && folder_list.length > 0) {
+                System.out.print("The folder is not empty. Are you sure you want to delete it? (Y/N): ");
+                String confirmation = inputFunction();
+                if (!confirmation.equalsIgnoreCase("Y")) {
+                    System.out.println("Deletion cancelled.");
+                    return false;
+                }
+                // Loop for each file in the selected folder
+                for (File file : folder.listFiles()) {
+                    // Check if the selected file is a folder or not
+                    if (file.isDirectory()) {
+                        // Call the same function but change path to the inside folder
+                        delDir(file.getAbsolutePath());
+                    } else {
+                        // If the selected file is a single file
+                        file.delete();
                     }
-                    //if the selected file is a single file
-                    file.delete();
                 }
             }
-            //in case the folder is empty
-            folder.delete();
+            // Delete the folder itself (whether empty or just cleaned)
+            boolean deleted = folder.delete();
+            if (!deleted) {
+                System.out.println("Failed to delete the folder: " + folder.getAbsolutePath());
+                return false;
+            }
 
             return true;
         }
@@ -163,43 +210,44 @@ public class DirectoryOperations {
     public static void renameDir(String starting_string, String target_string) {
         DirectoryOperations ops = new DirectoryOperations();
 
-        //if no value is given for starting folder path (original folder name / path)
-        if(starting_string == null) {
+        // Prompt for starting folder name/path if not provided
+        if (starting_string == null) {
             System.out.print("enter starting folder name: ");
             starting_string = inputFunction();
         }
-        
-        //if no value is given for target path (new name of the folder/directory)
-        if(target_string == null) {
+
+        // Build starting and target File objects
+        File starting_path_file = new File(getPath() + ops.getPathDelimiter() + starting_string);
+
+        // Check if the starting directory exists and is a directory
+        if (!starting_path_file.exists() || !starting_path_file.isDirectory()) {
+            System.out.println("Starting directory does not exist or is not a directory.");
+            return;
+        }    
+
+        // Prompt for target folder name/path if not provided
+        if (target_string == null) {
             System.out.print("enter target folder name: ");
             target_string = inputFunction();
         }
-        
-        //turn the string inputs into path objects
-        Path starting_path = Paths.get(getPath() + ops.getPathDelimiter() + starting_string);
-        Path target_path = Paths.get(getPath() + ops.getPathDelimiter() + target_string);
 
-        //create file objects from the paths
-        File starting_path_file = new File(getPath() + ops.getPathDelimiter() + starting_string);
         File target_path_file = new File(getPath() + ops.getPathDelimiter() + target_string);
-        
-        //if the starting folder name exists and the target folder name doesnt exist
-        if ((starting_path_file.exists() == true) && (target_path_file.exists() == false)) {
-            try {
-                //move files from starting path to target path
-                Files.move(starting_path, target_path);
-            }
-            catch(Exception e) {
-                System.out.println(e);
-            }
+
+        // If the target folder name already exists
+        if (target_path_file.exists()) {
+            System.out.println("Target name already exists.");
+            return;
         }
-        //if the starting folder name doesnt exist
-        else if(starting_path_file.exists() == false) {
-            System.out.println("starting file not existing");
-        }
-        //if the target folder name already exists
-        else if (target_path_file.exists() == true) {
-            System.out.println("name already exists");
+
+        // Turn the string inputs into path objects
+        Path starting_path = starting_path_file.toPath();
+        Path target_path = target_path_file.toPath();
+
+        try {
+            // Move (rename) directory
+            Files.move(starting_path, target_path);
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 
@@ -216,39 +264,79 @@ public class DirectoryOperations {
      */
     public static void moveDir(String starting_path, String target_path) {
         DirectoryOperations ops = new DirectoryOperations();
-
-        //in case no starting path name is given as parameter
-        if(starting_path == null) {
+        
+        String delimiter = ops.getPathDelimiter();
+        File currentDir = new File(getPath());
+        File[] files = currentDir.listFiles();
+        boolean found = false;
+        File startingFile = null;
+        
+        // Prompt for starting path if not provided
+        if (starting_path == null) {
             System.out.print("enter starting path: ");
             starting_path = inputFunction();
         }
         
-        //in case no target path name is given as a parameter
-        if(target_path == null) {
+        if (!found) {
+            // Check if a directory with the given name exists in the current directory
+            if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory() && f.getName().equals(starting_path)) {
+                startingFile = f;
+                found = true;
+                break;
+                }
+            }
+            }
+            // If still not found, check if the string contains the PathDelimiter
+            if (!found) {
+            if (starting_path.contains(delimiter)) {
+                startingFile = new File(starting_path);
+                if (!startingFile.exists() || !startingFile.isDirectory()) {
+                System.out.println("The specified starting path does not exist or is not a directory.");
+                return;
+                }
+            } else {
+                System.out.println("Invalid starting path. Please provide a valid directory name or path.");
+                return;
+            }
+            }
+        }
+
+        // Prompt for target path if not provided
+        if (target_path == null) {
             System.out.print("enter target path: ");
             target_path = inputFunction();
         }
-        
-        String[] split_starting_path = starting_path.split("[/\\\\]");
-        String starting_folder_name = split_starting_path[split_starting_path.length - 1];
 
-        target_path = target_path + ops.getPathDelimiter() + starting_folder_name;
+        // Check if starting_path is a folder inside the current directory
+        if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory() && f.getName().equals(starting_path)) {
+                    startingFile = f;
+                    found = true;
+                    break;
+                }
+            }
+        }
 
-        //create path objects
-        Path starting_path_obj = Paths.get(starting_path);
-        Path target_path_obj = Paths.get(target_path);
 
-        //move directory from starting path to target path
+        // Extract folder name
+        String starting_folder_name = startingFile.getName();
+        String targetFullPath = target_path + delimiter + starting_folder_name;
+
+        // Create path objects
+        Path starting_path_obj = startingFile.toPath();
+        Path target_path_obj = Paths.get(targetFullPath);
+
+        // Move directory from starting path to target path
         try {
             Files.move(starting_path_obj, target_path_obj);
-        }
-        catch(NoSuchFileException nsfe) {
+        } catch (NoSuchFileException nsfe) {
             System.out.println("path not found");
-        }
-        catch(FileAlreadyExistsException faee) {
+        } catch (FileAlreadyExistsException faee) {
             System.out.println("folder name already exist in path");
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }

@@ -188,7 +188,7 @@ public class Main {
 				
 			//create a new directory (folder)
 			case "MAKE_DIR":
-				DirectoryOperations.newDir(padded_input[1], padded_input[2]);
+				DirectoryOperations.newDir(padded_input[1]);
 				break;
 				
 			//delete a directory (folder)
