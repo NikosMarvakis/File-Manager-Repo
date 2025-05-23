@@ -34,16 +34,16 @@ public class FileOperations {
      * @param fileNameToCreate the name of the file to create, or null to prompt the user
      */
     public static void newFile(String fileNameToCreate) {
-        fileNameToCreate = promptIfNull(fileNameToCreate, "Enter file name: ");
+        fileNameToCreate = promptIfNull(fileNameToCreate, "Please enter the name for the new file: ");
         File fileToCreate = new File(getCurrentWorkingDirectory(), fileNameToCreate);
         try {
             if (fileToCreate.createNewFile()) {
-                System.out.println("New file created");
+                System.out.println("File created successfully: " + fileNameToCreate);
             } else {
-                System.out.println("File name already exists");
+                System.out.println("A file with this name already exists: " + fileNameToCreate);
             }
         } catch (Exception exception) {
-            System.out.println(exception);
+            System.out.println("Error creating file: " + exception.getMessage());
         }
     }
 
@@ -55,16 +55,17 @@ public class FileOperations {
      * @param fileNameToClear the name of the file to clear, or null to prompt the user
      */
     public static void clearFile(String fileNameToClear) {
-        fileNameToClear = promptIfNull(fileNameToClear, "Enter file name: ");
+        fileNameToClear = promptIfNull(fileNameToClear, "Please enter the name of the file to clear: ");
         File fileToClear = new File(getCurrentWorkingDirectory(), fileNameToClear);
         if (!fileToClear.exists()) {
-            System.out.println("File not existing");
+            System.out.println("The specified file does not exist: " + fileNameToClear);
             return;
         }
         try (FileWriter fileWriter = new FileWriter(fileToClear)) {
             fileWriter.write("");
+            System.out.println("File cleared successfully: " + fileNameToClear);
         } catch (Exception exception) {
-            System.out.println(exception);
+            System.out.println("Error clearing file: " + exception.getMessage());
         }
     }
 
@@ -76,15 +77,15 @@ public class FileOperations {
      * @param fileNameToDelete the name of the file to delete, or null to prompt the user
      */
     public static void delFile(String fileNameToDelete) {
-        fileNameToDelete = promptIfNull(fileNameToDelete, "Enter file name: ");
+        fileNameToDelete = promptIfNull(fileNameToDelete, "Please enter the name of the file to delete: ");
         File fileToDelete = new File(getCurrentWorkingDirectory(), fileNameToDelete);
         if (!fileToDelete.exists()) {
-            System.out.println("File not existing");
+            System.out.println("The specified file does not exist: " + fileNameToDelete);
             return;
         }
         clearFile(fileNameToDelete);
         fileToDelete.delete();
-        System.out.println("File deleted");
+        System.out.println("File deleted successfully: " + fileNameToDelete);
     }
 
     /**
@@ -96,18 +97,18 @@ public class FileOperations {
      * @param newFileName      the new name for the file, or null to prompt the user
      */
     public static void renameFile(String originalFileName, String newFileName) {
-        originalFileName = promptIfNull(originalFileName, "Enter file name: ");
+        originalFileName = promptIfNull(originalFileName, "Please enter the current file name: ");
         File sourceFile = new File(getCurrentWorkingDirectory(), originalFileName);
         if (!sourceFile.exists() || !sourceFile.isFile()) {
-            System.out.println("File not existing");
+            System.out.println("The specified file does not exist: " + originalFileName);
             return;
         }
-        newFileName = promptIfNull(newFileName, "Enter new file name: ");
+        newFileName = promptIfNull(newFileName, "Please enter the new name for the file: ");
         File destinationFile = new File(getCurrentWorkingDirectory(), newFileName);
         if (sourceFile.renameTo(destinationFile)) {
-            System.out.println("File renamed");
+            System.out.println("File renamed successfully to: " + newFileName);
         } else {
-            System.out.println("File renaming failed");
+            System.out.println("Failed to rename file: " + originalFileName);
         }
     }
 
@@ -120,17 +121,18 @@ public class FileOperations {
      * @return the contents of the file as a String (empty if file not found)
      */
     public static String readFile(String fileNameToRead) {
-        fileNameToRead = promptIfNull(fileNameToRead, "Enter file name: ");
+        fileNameToRead = promptIfNull(fileNameToRead, "Please enter the name of the file to read: ");
         File fileToRead = new File(getCurrentWorkingDirectory(), fileNameToRead);
         StringBuilder fileContentsBuilder = new StringBuilder();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileToRead))) {
             String currentLine;
+            System.out.println("Contents of " + fileNameToRead + ":");
             while ((currentLine = bufferedReader.readLine()) != null) {
                 System.out.println(currentLine);
                 fileContentsBuilder.append(currentLine);
             }
         } catch (Exception exception) {
-            System.out.println("File not found");
+            System.out.println("Unable to read file. File not found: " + fileNameToRead);
         }
         return fileContentsBuilder.toString();
     }
@@ -144,19 +146,20 @@ public class FileOperations {
      * @param textToAppend    the text to append, or null to prompt the user
      */
     public static void writeFile(String fileNameToWrite, String textToAppend) {
-        fileNameToWrite = promptIfNull(fileNameToWrite, "Enter file name: ");
+        fileNameToWrite = promptIfNull(fileNameToWrite, "Please enter the name of the file to write to: ");
         File fileToWrite = new File(getCurrentWorkingDirectory(), fileNameToWrite);
         if (!fileToWrite.exists()) {
-            System.out.println("File not existing");
+            System.out.println("The specified file does not exist: " + fileNameToWrite);
             return;
         }
-        textToAppend = promptIfNull(textToAppend, "Enter text: ");
+        textToAppend = promptIfNull(textToAppend, "Please enter the text to append: ");
         int existingLineCount = countLines(fileToWrite);
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileToWrite, true))) {
             if (existingLineCount != 0) bufferedWriter.newLine();
             bufferedWriter.write(textToAppend);
+            System.out.println("Text appended successfully to file: " + fileNameToWrite);
         } catch (IOException ioException) {
-            System.out.println(ioException);
+            System.out.println("Error writing to file: " + ioException.getMessage());
         }
     }
 
@@ -171,7 +174,7 @@ public class FileOperations {
      * @return the name of the newly created file, or null if the operation failed
      */
     public static String copy(String sourceFileName, String destinationFileName) {
-        sourceFileName = promptIfNull(sourceFileName, "Enter file name: ");
+        sourceFileName = promptIfNull(sourceFileName, "Please enter the name of the file to copy: ");
         String generatedDestinationName = destinationFileName;
         if (destinationFileName == null) {
             generatedDestinationName = generateUniqueFileName(sourceFileName);
@@ -180,9 +183,9 @@ public class FileOperations {
             try {
                 destinationFile.createNewFile();
             } catch (InvalidPathException invalidPathException) {
-                System.out.println("Path not found");
+                System.out.println("Invalid path specified for the destination file.");
             } catch (Exception exception) {
-                System.out.println("File name already exists");
+                System.out.println("A file with the destination name already exists: " + destinationFileName);
             }
         }
         try {
@@ -190,7 +193,7 @@ public class FileOperations {
             try {
                 destinationFile.createNewFile();
             } catch (Exception exception) {
-                System.out.println("File name already exists");
+                System.out.println("A file with the generated name already exists: " + generatedDestinationName);
             }
             try (FileInputStream fileInputStream = new FileInputStream(new File(getCurrentWorkingDirectory(), sourceFileName));
                  FileOutputStream fileOutputStream = new FileOutputStream(destinationFile)) {
@@ -200,12 +203,13 @@ public class FileOperations {
             if (destinationFileName != null) {
                 renameFile(generatedDestinationName, destinationFileName);
             }
+            System.out.println("File copied successfully to: " + generatedDestinationName);
         } catch (FileNotFoundException fileNotFoundException) {
-            System.out.println("File not found error fnfe");
+            System.out.println("Source file not found: " + sourceFileName);
         } catch (NullPointerException nullPointerException) {
-            System.out.println("File not found npe");
+            System.out.println("Source file not found: " + sourceFileName);
         } catch (Exception exception) {
-            System.out.println(exception);
+            System.out.println("Error copying file: " + exception.getMessage());
         }
         return generatedDestinationName;
     }
@@ -220,26 +224,28 @@ public class FileOperations {
      * @param destinationDirectoryPath the destination directory path, or null to prompt the user
      */
     public static void move(String sourceFileNameToMove, String destinationDirectoryPath) {
-        sourceFileNameToMove = promptIfNull(sourceFileNameToMove, "Enter file name: ");
+        sourceFileNameToMove = promptIfNull(sourceFileNameToMove, "Please enter the name of the file to move: ");
         File sourceFileToMove = new File(getCurrentWorkingDirectory(), sourceFileNameToMove);
         if (!sourceFileToMove.exists()) {
-            System.out.println("Source file does not exist.");
+            System.out.println("The specified source file does not exist: " + sourceFileNameToMove);
             return;
         }
-        destinationDirectoryPath = promptIfNull(destinationDirectoryPath, "Enter target path: ");
+        destinationDirectoryPath = promptIfNull(destinationDirectoryPath, "Please enter the destination directory path: ");
         String pathDelimiter = directoryOperationsInstance.getCurrentWorkingDirectoryDelimiter();
         String sourceFilePath = getCurrentWorkingDirectory() + pathDelimiter + sourceFileNameToMove;
         String destinationFilePath = destinationDirectoryPath + pathDelimiter + sourceFileNameToMove;
         try {
             Files.move(Paths.get(sourceFilePath), Paths.get(destinationFilePath));
+            System.out.println("File moved successfully to: " + destinationDirectoryPath);
         } catch (java.nio.file.NoSuchFileException noSuchFileException) {
-            System.out.println("File or path not found error");
+            System.out.println("File or destination path not found.");
         } catch (java.nio.file.FileAlreadyExistsException fileAlreadyExistsException) {
+            System.out.println("A file with the same name already exists at the destination. Overwriting...");
             String copiedFileName = copy(sourceFileNameToMove, null);
             move(copiedFileName, destinationDirectoryPath);
             delFile(sourceFileNameToMove);
         } catch (Exception exception) {
-            System.out.println(exception);
+            System.out.println("Error moving file: " + exception.getMessage());
         }
     }
 
@@ -254,8 +260,7 @@ public class FileOperations {
      */
     private static String promptIfNull(String valueToCheck, String promptText) {
         if (valueToCheck == null) {
-            System.out.print(promptText);
-            return readUserInput();
+            return readUserInput(promptText);
         }
         return valueToCheck;
     }

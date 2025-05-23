@@ -25,10 +25,11 @@ public class InputUtils {
      * This method waits for the user to enter a line of text and returns it as a {@code String}.
      * It is typically used to capture commands or other input required by the File Manager application.
      * </p>
-     *
+     * @param userMessage the message to display to the user before reading input
      * @return a {@code String} containing the user's input from the console
      */
-    public static String readUserInput() {
+    public static String readUserInput(String userMessage) {
+        System.out.print(userMessage);
         return CONSOLE_SCANNER.nextLine();
     }
 
@@ -59,7 +60,7 @@ public class InputUtils {
         final int COMMAND_COLUMN_WIDTH = 20;
 
         System.out.println(COMMAND_MENU_SEPARATOR);
-        System.out.println("Available Commands:");
+        System.out.println("Available commands:");
         System.out.println(COMMAND_MENU_SEPARATOR);
 
         for (int commandIndex = 0; commandIndex < availableCommands.length; commandIndex++) {

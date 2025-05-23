@@ -52,8 +52,7 @@ public class PathUtils {
      */
     public static String changeWorkingDirectory(String targetDirectoryPath) {
         if (targetDirectoryPath == null) {
-            System.out.print("Enter path: ");
-            targetDirectoryPath = InputUtils.readUserInput();
+            targetDirectoryPath = InputUtils.readUserInput("Please enter the path to the directory you want to switch to: ");
         }
 
         try {
@@ -73,9 +72,9 @@ public class PathUtils {
                 }
             }
 
-            System.out.println("Directory not found: " + targetDirectoryPath);
+            System.out.println("The specified directory was not found: " + targetDirectoryPath);
         } catch (java.nio.file.InvalidPathException invalidPathException) {
-            System.out.println("Invalid path: " + targetDirectoryPath);
+            System.out.println("The path you entered is invalid: " + targetDirectoryPath);
         }
         return null;
     }

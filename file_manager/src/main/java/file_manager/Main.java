@@ -63,16 +63,24 @@ public class Main {
 	 * @param args Command-line arguments (not used).
 	 */
 	public static void main(String[] args) {
+		System.out.println("Welcome to the File Manager!");
+		System.out.println("Type 'info' to see the list of available commands.");
+		System.out.println("Type 'exit' at any time to close the application.");
+		System.out.println();
 		InputUtils.displayAvailableCommands();
 		System.out.println();
 
 		String[] parsedUserInputArguments = new String[4];
+		
+		// System.out.print("Enter a command (use '>' for multiple input): ");
 		String rawUserInput = promptAndValidateUserInput();
-
+		
 		while (!rawUserInput.equals(EXIT_COMMAND)) {
 			processUserInput(rawUserInput, parsedUserInputArguments);
+			// System.out.print("Enter a command (use '>' for multiple input): ");
 			rawUserInput = promptAndValidateUserInput();
 		}
+		System.out.println("Thank you for using the File Manager. Goodbye!");
 	}
 
 	/**
@@ -110,13 +118,13 @@ public class Main {
 	 */
 	private static String promptAndValidateUserInput() {
 		while (true) {
-			System.out.print("Enter input (use '>' to give multiple input values at once): ");
-			String userInput = InputUtils.readUserInput();
+			String userInput = InputUtils.readUserInput("Enter a command (use '>' for multiple input): ");
 			String userCommand = userInput.split(">")[0].trim();
 			if (COMMAND_CODE_TO_STRING_MAP.containsValue(userCommand) || userCommand.equals(EXIT_COMMAND)) {
 				return userInput;
 			}
-			System.out.println("Invalid command. Please enter a supported command.");
+			System.out.println("⚠️  Unrecognized command. Please enter a valid command or type 'info' for help.");
+			// userInput = InputUtils.readUserInput("Enter a command (use '>' for multiple input): ");
 		}
 	}
 
@@ -156,52 +164,66 @@ public class Main {
 				DirectoryOperations.listDir();
 				break;
 			case "PATH":
-				System.out.println(PathUtils.getCurrentWorkingDirectory());
+				System.out.println("Current working directory: " + PathUtils.getCurrentWorkingDirectory());
 				break;
 			case "INFO":
 				InputUtils.displayAvailableCommands();
 				System.out.println();
 				break;
 			case "CHDIR":
+				System.out.println("Changing directory...");
 				PathUtils.changeWorkingDirectory(parsedUserInputArguments[1]);
 				break;
 			case "PREVDIR":
+				System.out.println("Moving to parent directory...");
 				PathUtils.changeToParentDirectory();
 				break;
 			case "MAKE_FILE":
+				System.out.println("Creating new file...");
 				FileOperations.newFile(parsedUserInputArguments[1]);
 				break;
 			case "DELETE_FILE":
+				System.out.println("Deleting file...");
 				FileOperations.delFile(parsedUserInputArguments[1]);
 				break;
 			case "RENAME_FILE":
+				System.out.println("Renaming file...");
 				FileOperations.renameFile(parsedUserInputArguments[1], parsedUserInputArguments[2]);
 				break;
 			case "READ_FILE":
+				System.out.println("Reading file...");
 				FileOperations.readFile(parsedUserInputArguments[1]);
 				break;
 			case "WRITE_FILE":
+				System.out.println("Writing to file...");
 				FileOperations.writeFile(parsedUserInputArguments[1], parsedUserInputArguments[2]);
 				break;
 			case "CLEAR_FILE":
+				System.out.println("Clearing file contents...");
 				FileOperations.clearFile(parsedUserInputArguments[1]);
 				break;
 			case "COPY_FILE":
+				System.out.println("Copying file...");
 				FileOperations.copy(parsedUserInputArguments[1], parsedUserInputArguments[2]);
 				break;
 			case "MOVE_FILE":
+				System.out.println("Moving file...");
 				FileOperations.move(parsedUserInputArguments[1], parsedUserInputArguments[2]);
 				break;
 			case "MAKE_DIR":
+				System.out.println("Creating new directory...");
 				DirectoryOperations.newDir(parsedUserInputArguments[1]);
 				break;
 			case "DELETE_DIR":
+				System.out.println("Deleting directory...");
 				DirectoryOperations.delDir(parsedUserInputArguments[1]);
 				break;
 			case "RENAME_DIR":
+				System.out.println("Renaming directory...");
 				DirectoryOperations.renameDir(parsedUserInputArguments[1], parsedUserInputArguments[2]);
 				break;
 			case "MOVE_DIR":
+				System.out.println("Moving directory...");
 				DirectoryOperations.moveDir(parsedUserInputArguments[1], parsedUserInputArguments[2]);
 				break;
 		}

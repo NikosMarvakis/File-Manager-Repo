@@ -44,9 +44,12 @@ public class DirectoryOperations {
         File currentWorkingDirectoryFile = new File(System.getProperty("user.dir"));
         String[] directoryContents = currentWorkingDirectoryFile.list();
         if (directoryContents != null) {
+            System.out.println("Contents of the current directory:");
             for (String fileNameOrDirName : directoryContents) {
-                System.out.println(fileNameOrDirName);
+                System.out.println(" - " + fileNameOrDirName);
             }
+        } else {
+            System.out.println("Unable to list directory contents.");
         }
     }
 
@@ -60,8 +63,7 @@ public class DirectoryOperations {
         String currentWorkingDirectoryPath = getCurrentWorkingDirectory();
 
         if (directoryName == null) {
-            System.out.print("Enter folder name: ");
-            directoryName = readUserInput();
+            directoryName = readUserInput("Please enter the name for the new folder: ");
         }
 
         if (!currentWorkingDirectoryPath.endsWith(directoryOperationsInstance.getCurrentWorkingDirectoryDelimiter())) {
@@ -72,9 +74,10 @@ public class DirectoryOperations {
 
         if (!newDirectoryFile.exists()) {
             newDirectoryFile.mkdir();
+            System.out.println("Folder '" + directoryName + "' created successfully.");
             return true;
         } else {
-            System.out.println("Folder name already exists.");
+            System.out.println("A folder with this name already exists. Please choose a different name.");
             return false;
         }
     }
@@ -86,8 +89,7 @@ public class DirectoryOperations {
      */
     public static boolean delDir(String directoryPath) {
         if (directoryPath == null) {
-            System.out.print("Enter path to folder to delete: ");
-            directoryPath = readUserInput();
+            directoryPath = readUserInput("Please enter the path of the folder you want to delete: ");
         }
 
         DirectoryOperations directoryOperationsInstance = new DirectoryOperations();
@@ -95,26 +97,25 @@ public class DirectoryOperations {
         File directoryToDelete = resolveFolder(directoryPath, pathDelimiter);
 
         if (directoryToDelete == null) {
-            System.out.println("The specified path does not exist or is not a directory.");
+            System.out.println("Error: The specified folder does not exist or is not a directory.");
             return false;
         }
 
         try {
             if (!directoryToDelete.exists()) {
-                System.out.println("The specified path does not exist.");
+                System.out.println("Error: The specified folder does not exist.");
                 return false;
             }
             if (!directoryToDelete.isDirectory()) {
-                System.out.println("The specified path is not a directory.");
+                System.out.println("Error: The specified path is not a folder.");
                 return false;
             }
 
             String[] directoryContents = directoryToDelete.list();
             if (directoryContents != null && directoryContents.length > 0) {
-                System.out.print("The folder is not empty. Are you sure you want to delete it? (Y/N): ");
-                String userConfirmation = readUserInput();
+                String userConfirmation = readUserInput("Warning: The folder is not empty. Do you want to delete it and all its contents? (Y/N): ");
                 if (!userConfirmation.equalsIgnoreCase("Y")) {
-                    System.out.println("Deletion cancelled.");
+                    System.out.println("Folder deletion cancelled by user.");
                     return false;
                 }
                 for (File fileOrSubdirectory : directoryToDelete.listFiles()) {
@@ -126,14 +127,15 @@ public class DirectoryOperations {
                 }
             }
             if (!directoryToDelete.delete()) {
-                System.out.println("Failed to delete the folder: " + directoryToDelete.getAbsolutePath());
+                System.out.println("Error: Unable to delete the folder: " + directoryToDelete.getAbsolutePath());
                 return false;
             }
+            System.out.println("Folder deleted successfully.");
             return true;
         } catch (NullPointerException npe) {
-            System.out.println("Folder name must be given as a path.");
+            System.out.println("Error: Please provide a valid folder path.");
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("An error occurred: " + e);
         }
         return false;
     }
@@ -147,31 +149,30 @@ public class DirectoryOperations {
         DirectoryOperations directoryOperationsInstance = new DirectoryOperations();
 
         if (sourceDirectoryNameOrPath == null) {
-            System.out.print("Enter starting folder name: ");
-            sourceDirectoryNameOrPath = readUserInput();
+            sourceDirectoryNameOrPath = readUserInput("Enter the current name of the folder you want to rename: ");
         }
 
         File sourceDirectoryFile = new File(getCurrentWorkingDirectory() + directoryOperationsInstance.getCurrentWorkingDirectoryDelimiter() + sourceDirectoryNameOrPath);
         if (!sourceDirectoryFile.exists() || !sourceDirectoryFile.isDirectory()) {
-            System.out.println("Starting directory does not exist or is not a directory.");
+            System.out.println("Error: The folder you want to rename does not exist or is not a directory.");
             return;
         }
 
         if (targetDirectoryNameOrPath == null) {
-            System.out.print("Enter target folder name: ");
-            targetDirectoryNameOrPath = readUserInput();
+            targetDirectoryNameOrPath = readUserInput("Enter the new name for the folder: ");
         }
 
         File targetDirectoryFile = new File(getCurrentWorkingDirectory() + directoryOperationsInstance.getCurrentWorkingDirectoryDelimiter() + targetDirectoryNameOrPath);
         if (targetDirectoryFile.exists()) {
-            System.out.println("Target name already exists.");
+            System.out.println("Error: A folder with the new name already exists. Please choose a different name.");
             return;
         }
 
         try {
             Files.move(sourceDirectoryFile.toPath(), targetDirectoryFile.toPath());
+            System.out.println("Folder renamed successfully.");
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("An error occurred while renaming the folder: " + e);
         }
     }
 
@@ -185,20 +186,18 @@ public class DirectoryOperations {
         String pathDelimiter = directoryOperationsInstance.getCurrentWorkingDirectoryDelimiter();
 
         if (sourceDirectoryPath == null) {
-            System.out.print("Enter starting path: ");
-            sourceDirectoryPath = readUserInput();
+            sourceDirectoryPath = readUserInput("Enter the path of the folder you want to move: ");
         }
 
         File sourceDirectoryFile = resolveFolder(sourceDirectoryPath, pathDelimiter);
 
         if (sourceDirectoryFile == null || !sourceDirectoryFile.exists() || !sourceDirectoryFile.isDirectory()) {
-            System.out.println("The specified starting path does not exist or is not a directory.");
+            System.out.println("Error: The folder you want to move does not exist or is not a directory.");
             return;
         }
 
         if (targetParentDirectoryPath == null) {
-            System.out.print("Enter target path: ");
-            targetParentDirectoryPath = readUserInput();
+            targetParentDirectoryPath = readUserInput("Enter the destination path where you want to move the folder: ");
         }
 
         String targetFullDirectoryPath = targetParentDirectoryPath + pathDelimiter + sourceDirectoryFile.getName();
@@ -207,12 +206,13 @@ public class DirectoryOperations {
 
         try {
             Files.move(sourceDirectoryPathObj, targetDirectoryPathObj);
+            System.out.println("Folder moved successfully.");
         } catch (NoSuchFileException nsfe) {
-            System.out.println("Path not found.");
+            System.out.println("Error: Destination path not found.");
         } catch (FileAlreadyExistsException faee) {
-            System.out.println("Folder name already exists in path.");
+            System.out.println("Error: A folder with the same name already exists at the destination.");
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("An error occurred while moving the folder: " + e);
         }
     }
 
