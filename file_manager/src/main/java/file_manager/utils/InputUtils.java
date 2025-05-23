@@ -17,7 +17,7 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class InputUtils {
-    private static final Scanner SCANNER = new Scanner(System.in);
+    private static final Scanner CONSOLE_SCANNER = new Scanner(System.in);
 
     /**
      * Reads a line of input from the user via the command line.
@@ -28,8 +28,8 @@ public class InputUtils {
      *
      * @return a {@code String} containing the user's input from the console
      */
-    public static String inputFunction() {
-        return SCANNER.nextLine();
+    public static String readUserInput() {
+        return CONSOLE_SCANNER.nextLine();
     }
 
     /**
@@ -43,8 +43,8 @@ public class InputUtils {
      * reading, and writing files or directories, as well as navigation commands.
      * </p>
      */
-    public static void getCommands() {
-        String[] commands = {
+    public static void displayAvailableCommands() {
+        String[] availableCommands = {
             "exit", "list", "path", "info",
             "chdir", "prevdir", "make file",
             "delete file", "rename file", "read file",
@@ -53,22 +53,22 @@ public class InputUtils {
             "rename dir", "move dir"
         };
 
-        final int SEPARATOR_LENGTH = 60;
-        final String SEPARATOR = "=".repeat(SEPARATOR_LENGTH);
-        final int COLUMNS = 3;
-        final int COL_WIDTH = 20;
+        final int COMMAND_MENU_WIDTH = 60;
+        final String COMMAND_MENU_SEPARATOR = "=".repeat(COMMAND_MENU_WIDTH);
+        final int COMMANDS_PER_ROW = 3;
+        final int COMMAND_COLUMN_WIDTH = 20;
 
-        System.out.println(SEPARATOR);
+        System.out.println(COMMAND_MENU_SEPARATOR);
         System.out.println("Available Commands:");
-        System.out.println(SEPARATOR);
+        System.out.println(COMMAND_MENU_SEPARATOR);
 
-        for (int i = 0; i < commands.length; i++) {
-            System.out.printf("%-" + COL_WIDTH + "s", commands[i]);
-            if ((i + 1) % COLUMNS == 0 || i == commands.length - 1) {
+        for (int commandIndex = 0; commandIndex < availableCommands.length; commandIndex++) {
+            System.out.printf("%-" + COMMAND_COLUMN_WIDTH + "s", availableCommands[commandIndex]);
+            if ((commandIndex + 1) % COMMANDS_PER_ROW == 0 || commandIndex == availableCommands.length - 1) {
                 System.out.println();
             }
         }
 
-        System.out.println(SEPARATOR);
+        System.out.println(COMMAND_MENU_SEPARATOR);
     }
 }

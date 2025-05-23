@@ -28,14 +28,14 @@ import file_manager.operations.DirectoryOperations;
  * @version 1.0
  */
 public class PathUtils {
-    private static final DirectoryOperations dirOps = new DirectoryOperations();
+    private static final DirectoryOperations directoryOperations = new DirectoryOperations();
 
     /**
      * Retrieves the absolute path of the current working directory.
      *
      * @return the current working directory as a String
      */
-    public static String getPath() {
+    public static String getCurrentWorkingDirectory() {
         return System.getProperty("user.dir");
     }
 
@@ -47,35 +47,35 @@ public class PathUtils {
      * the target directory exists before updating the working directory.
      * </p>
      *
-     * @param path the target directory path, or {@code null} to prompt the user
+     * @param targetDirectoryPath the target directory path, or {@code null} to prompt the user
      * @return the new working directory path if successful, or {@code null} if the operation fails
      */
-    public static String changeDir(String path) {
-        if (path == null) {
+    public static String changeWorkingDirectory(String targetDirectoryPath) {
+        if (targetDirectoryPath == null) {
             System.out.print("Enter path: ");
-            path = InputUtils.inputFunction();
+            targetDirectoryPath = InputUtils.readUserInput();
         }
 
         try {
-            Path currentDir = Paths.get(getPath());
-            Path localPath = currentDir.resolve(path).normalize();
+            Path currentDirectoryPath = Paths.get(getCurrentWorkingDirectory());
+            Path resolvedTargetCurrentWorkingDirectory = currentDirectoryPath.resolve(targetDirectoryPath).normalize();
 
-            if (Files.isDirectory(localPath)) {
-                System.setProperty("user.dir", localPath.toString());
-                return localPath.toString();
+            if (Files.isDirectory(resolvedTargetCurrentWorkingDirectory)) {
+                System.setProperty("user.dir", resolvedTargetCurrentWorkingDirectory.toString());
+                return resolvedTargetCurrentWorkingDirectory.toString();
             }
 
-            if (path.contains(dirOps.getPathDelimiter())) {
-                Path fullPath = Paths.get(path).normalize();
-                if (Files.isDirectory(fullPath)) {
-                    System.setProperty("user.dir", fullPath.toString());
-                    return fullPath.toString();
+            if (targetDirectoryPath.contains(directoryOperations.getCurrentWorkingDirectoryDelimiter())) {
+                Path absoluteTargetCurrentWorkingDirectory = Paths.get(targetDirectoryPath).normalize();
+                if (Files.isDirectory(absoluteTargetCurrentWorkingDirectory)) {
+                    System.setProperty("user.dir", absoluteTargetCurrentWorkingDirectory.toString());
+                    return absoluteTargetCurrentWorkingDirectory.toString();
                 }
             }
 
-            System.out.println("Directory not found: " + path);
-        } catch (java.nio.file.InvalidPathException ipe) {
-            System.out.println("Invalid path: " + path);
+            System.out.println("Directory not found: " + targetDirectoryPath);
+        } catch (java.nio.file.InvalidPathException invalidPathException) {
+            System.out.println("Invalid path: " + targetDirectoryPath);
         }
         return null;
     }
@@ -86,19 +86,19 @@ public class PathUtils {
      * If the current directory is already the root, this method does nothing.
      * </p>
      */
-    public static void prevDir() {
-        String[] parts = getPath().split(dirOps.getPathDelimiter());
-        if (parts.length <= 1) {
+    public static void changeToParentDirectory() {
+        String[] currentDirectoryParts = getCurrentWorkingDirectory().split(directoryOperations.getCurrentWorkingDirectoryDelimiter());
+        if (currentDirectoryParts.length <= 1) {
             // Already at root, do nothing
             return;
         }
-        StringBuilder parentPath = new StringBuilder();
-        for (int i = 0; i < parts.length - 1; i++) {
-            parentPath.append(parts[i]);
-            if (i < parts.length - 2) {
-                parentPath.append(dirOps.getPathDelimiter());
+        StringBuilder parentDirectoryPathBuilder = new StringBuilder();
+        for (int partIndex = 0; partIndex < currentDirectoryParts.length - 1; partIndex++) {
+            parentDirectoryPathBuilder.append(currentDirectoryParts[partIndex]);
+            if (partIndex < currentDirectoryParts.length - 2) {
+                parentDirectoryPathBuilder.append(directoryOperations.getCurrentWorkingDirectoryDelimiter());
             }
         }
-        changeDir(parentPath.toString());
+        changeWorkingDirectory(parentDirectoryPathBuilder.toString());
     }
 }

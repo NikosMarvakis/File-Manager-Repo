@@ -21,7 +21,7 @@ public class FileOperationsTest {
         FileOperations.newFile(testFileName);
         
         // Verify the file was created
-        File file = new File(PathUtils.getPath(), testFileName);
+        File file = new File(PathUtils.getCurrentWorkingDirectory(), testFileName);
         assertTrue("File should exist", file.exists());
         
         // Clean up
@@ -40,7 +40,7 @@ public class FileOperationsTest {
         FileOperations.writeFile(testFileName, testContent);
         
         // Read the file content
-        File file = new File(PathUtils.getPath(), testFileName);
+        File file = new File(PathUtils.getCurrentWorkingDirectory(), testFileName);
         assertTrue("File should exist", file.exists());
         assertEquals(testContent, readFile(testFileName));
 
