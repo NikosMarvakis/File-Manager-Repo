@@ -87,7 +87,7 @@ public class DirectoryOperations {
      * @param directoryPath The path of the directory to delete. If null, prompts user for input.
      * @return true if the directory was deleted successfully, false otherwise
      */
-    public static boolean delDir(String directoryPath) {
+    public static boolean delDir(String directoryPath, String autoConfirmString) {
         if (directoryPath == null) {
             directoryPath = readUserInput("Please enter the path of the folder you want to delete: ");
         }
@@ -113,16 +113,20 @@ public class DirectoryOperations {
 
             String[] directoryContents = directoryToDelete.list();
             if (directoryContents != null && directoryContents.length > 0) {
-                String userConfirmation = readUserInput("Warning: The folder is not empty. Do you want to delete it and all its contents? (Y/N): ");
-                if (!userConfirmation.equalsIgnoreCase("Y")) {
-                    System.out.println("Folder deletion cancelled by user.");
-                    return false;
+                if(autoConfirmString == "n"){
+                    String userConfirmation = readUserInput("Warning: The folder is not empty. Do you want to delete it and all its contents? (Y/N): ");
+                    if (!userConfirmation.equalsIgnoreCase("Y")) {
+                        System.out.println("Folder deletion cancelled by user.");
+                        return false;
+                    }
                 }
-                for (File fileOrSubdirectory : directoryToDelete.listFiles()) {
-                    if (fileOrSubdirectory.isDirectory()) {
-                        delDir(fileOrSubdirectory.getAbsolutePath());
-                    } else {
-                        fileOrSubdirectory.delete();
+                else{
+                    for (File fileOrSubdirectory : directoryToDelete.listFiles()) {
+                        if (fileOrSubdirectory.isDirectory()) {
+                            delDir(fileOrSubdirectory.getAbsolutePath(), autoConfirmString);
+                        } else {
+                            fileOrSubdirectory.delete();
+                        }
                     }
                 }
             }

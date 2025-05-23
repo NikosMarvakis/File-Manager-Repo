@@ -216,7 +216,7 @@ public class Main {
 				break;
 			case "DELETE_DIR":
 				System.out.println("Deleting directory...");
-				DirectoryOperations.delDir(parsedUserInputArguments[1]);
+				DirectoryOperations.delDir(parsedUserInputArguments[1], "n");
 				break;
 			case "RENAME_DIR":
 				System.out.println("Renaming directory...");
