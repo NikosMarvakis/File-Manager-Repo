@@ -4,43 +4,28 @@ import java.util.Scanner;
 
 /**
  * Utility class for handling user input and command display in the File Manager application.
- * This class provides methods for reading user input from the command line and displaying
- * the available commands in a formatted menu.
+ * Provides methods for reading user input and displaying available commands.
  *
  * @author Nikolaos Marvakis
  * @version 1.0
  */
 public class InputUtils {
-    private static Scanner scan_obj = new Scanner(System.in); 
-    
+    private static final Scanner SCANNER = new Scanner(System.in);
+
     /**
      * Reads a line of input from the user via the command line.
-     * This method creates a Scanner object to read from System.in,
-     * captures the next line of input, and properly closes the scanner.
      *
      * @return String containing the user's input
      */
     public static String inputFunction() {
-        //create scanner object
-        //take the next line as input
-        String user_input = scan_obj.nextLine();
-        
-        return user_input;        
+        return SCANNER.nextLine();
     }
 
     /**
      * Displays a formatted menu of all available commands in the File Manager application.
-     * The commands are displayed in a table format.
-     * The menu is surrounded by separator lines for better visibility.
-     * 
-     * Available commands include:
-     * - File operations: make file, delete file, rename file, read file, write file, clear file, copy file, move file
-     * - Directory operations: make dir, delete dir, rename dir, move dir
-     * - Path operations: list, path, chdir, prevdir
-     * - System operations: exit, info
      */
     public static void getCommands() {
-        String[] commands = new String[] {
+        String[] commands = {
             "exit", "list", "path", "info",
             "chdir", "prevdir", "make file",
             "delete file", "rename file", "read file",
@@ -49,23 +34,22 @@ public class InputUtils {
             "rename dir", "move dir"
         };
 
-        int separatorLength = 60;
-        String separator = "=".repeat(separatorLength);
+        final int SEPARATOR_LENGTH = 60;
+        final String SEPARATOR = "=".repeat(SEPARATOR_LENGTH);
+        final int COLUMNS = 3;
+        final int COL_WIDTH = 20;
 
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
         System.out.println("Available Commands:");
-        System.out.println(separator);
-
-        int columns = 3;
-        int colWidth = 20;
+        System.out.println(SEPARATOR);
 
         for (int i = 0; i < commands.length; i++) {
-            System.out.printf("%-" + colWidth + "s", commands[i]);
-            if ((i + 1) % columns == 0 || i == commands.length - 1) {
+            System.out.printf("%-" + COL_WIDTH + "s", commands[i]);
+            if ((i + 1) % COLUMNS == 0 || i == commands.length - 1) {
                 System.out.println();
             }
         }
 
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
     }
-} 
+}
