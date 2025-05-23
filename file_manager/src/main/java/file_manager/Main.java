@@ -8,6 +8,9 @@ import file_manager.utils.PathUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: javadoc newDir > creates a new directory at the specified path
+// TODO: make different constructors private to avoid creating them
+
 /**
  * The {@code Main} class is the entry point for the File Manager application.
  * It provides a command-line interface for users to manage files and directories.

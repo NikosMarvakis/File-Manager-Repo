@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import static file_manager.utils.PathUtils.getCurrentWorkingDirectory;
 import static org.junit.Assert.*;
 
-
 public class FileOperationsTest {
 
     private final String testFileName = "testFile.txt";
