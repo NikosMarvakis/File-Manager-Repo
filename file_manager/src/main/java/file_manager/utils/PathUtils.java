@@ -43,27 +43,34 @@ public class PathUtils {
      * @throws java.nio.file.InvalidPathException if the provided path is invalid
      */
     public static String changeDir(String path) {
-        //if path value is not given as parameter
         if (path == null) {
             System.out.print("Enter path: ");
             path = InputUtils.inputFunction();
         }
-        
+
         try {
-            //create path object
-            Path path1 = Paths.get(path);
-            
-            //check if directory exists
-            if (Files.isDirectory(path1) == true) {
-                System.setProperty("user.dir", path1.toString());
-                return path1.toString();
+            // First, check if the path is a valid directory in the current directory
+            Path currentDir = Paths.get(getPath());
+            Path localPath = currentDir.resolve(path).normalize();
+
+            if (Files.isDirectory(localPath)) {
+                System.setProperty("user.dir", localPath.toString());
+                return localPath.toString();
             }
-            else {
-                System.out.println("directory not existing");
+
+            // If not found, check if the path contains the path delimiter and treat as absolute/relative path
+            if (path.contains(dirOps.getPathDelimiter())) {
+                Path fullPath = Paths.get(path).normalize();
+                if (Files.isDirectory(fullPath)) {
+                    System.setProperty("user.dir", fullPath.toString());
+                    return fullPath.toString();
+                }
             }
-        }
-        catch(java.nio.file.InvalidPathException ipe) {
-            System.out.println("invalid path");
+
+            // If neither works, show error
+            System.out.println("Directory not found: " + path);
+        } catch (java.nio.file.InvalidPathException ipe) {
+            System.out.println("Invalid path: " + path);
         }
         return null;
     }

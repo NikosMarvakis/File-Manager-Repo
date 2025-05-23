@@ -249,7 +249,6 @@ public class FileOperations {
             text = inputFunction();
         }
 
-
         int total_lines = 0;
 
         //count the number of lines in a file
