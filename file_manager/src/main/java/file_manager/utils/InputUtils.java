@@ -3,8 +3,15 @@ package file_manager.utils;
 import java.util.Scanner;
 
 /**
- * Utility class for handling user input and command display in the File Manager application.
- * Provides methods for reading user input and displaying available commands.
+ * <h1>InputUtils</h1>
+ * <p>
+ *   The {@code InputUtils} class provides utility methods for handling user input
+ *   and displaying available commands in the File Manager application.
+ * </p>
+ * <p>
+ *   This class encapsulates a {@link Scanner} instance for reading input from the console
+ *   and offers methods to retrieve user input and present a formatted list of commands.
+ * </p>
  *
  * @author Nikolaos Marvakis
  * @version 1.0
@@ -14,8 +21,12 @@ public class InputUtils {
 
     /**
      * Reads a line of input from the user via the command line.
+     * <p>
+     * This method waits for the user to enter a line of text and returns it as a {@code String}.
+     * It is typically used to capture commands or other input required by the File Manager application.
+     * </p>
      *
-     * @return String containing the user's input
+     * @return a {@code String} containing the user's input from the console
      */
     public static String inputFunction() {
         return SCANNER.nextLine();
@@ -23,6 +34,14 @@ public class InputUtils {
 
     /**
      * Displays a formatted menu of all available commands in the File Manager application.
+     * <p>
+     * This method prints a list of supported commands to the console, organized in columns for readability.
+     * It helps users understand the available operations they can perform within the application.
+     * </p>
+     * <p>
+     * The commands include file and directory operations such as creating, deleting, renaming, moving,
+     * reading, and writing files or directories, as well as navigation commands.
+     * </p>
      */
     public static void getCommands() {
         String[] commands = {

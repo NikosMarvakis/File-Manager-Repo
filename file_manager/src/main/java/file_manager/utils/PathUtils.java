@@ -7,11 +7,22 @@ import java.nio.file.Paths;
 import file_manager.operations.DirectoryOperations;
 
 /**
- * Utility class for path management in the File Manager application.
- * Handles:
- * - Getting the current working directory
- * - Changing directories
- * - Navigating to parent directories
+ * Utility class for managing file system paths in the File Manager application.
+ * <p>
+ * This class provides static methods to:
+ * <ul>
+ *   <li>Retrieve the current working directory</li>
+ *   <li>Change the current working directory to a specified path</li>
+ *   <li>Navigate to the parent directory</li>
+ * </ul>
+ * <p>
+ * It supports both absolute and relative paths, and updates the "user.dir" system property
+ * to reflect changes in the working directory. Path validation is performed using
+ * {@link java.nio.file.Files} and {@link java.nio.file.Path}.
+ * <p>
+ * The class also interacts with {@link DirectoryOperations} for platform-specific path delimiters,
+ * and with {@code InputUtils} for user input when a path is not provided.
+ * </p>
  * 
  * @author Nikolaos Marvakis
  * @version 1.0
@@ -20,7 +31,9 @@ public class PathUtils {
     private static final DirectoryOperations dirOps = new DirectoryOperations();
 
     /**
-     * Returns the absolute path of the current working directory.
+     * Retrieves the absolute path of the current working directory.
+     *
+     * @return the current working directory as a String
      */
     public static String getPath() {
         return System.getProperty("user.dir");
@@ -28,11 +41,14 @@ public class PathUtils {
 
     /**
      * Changes the current working directory to the specified path.
-     * Handles both absolute and relative paths.
-     * If path is null, prompts the user for input.
+     * <p>
+     * If the provided path is {@code null}, the user is prompted to enter a path.
+     * The method supports both absolute and relative paths, and validates whether
+     * the target directory exists before updating the working directory.
+     * </p>
      *
-     * @param path Target directory path. If null, user will be prompted.
-     * @return New working directory path if successful, null otherwise.
+     * @param path the target directory path, or {@code null} to prompt the user
+     * @return the new working directory path if successful, or {@code null} if the operation fails
      */
     public static String changeDir(String path) {
         if (path == null) {
@@ -65,7 +81,10 @@ public class PathUtils {
     }
 
     /**
-     * Navigates to the parent directory of the current working directory.
+     * Changes the current working directory to its parent directory.
+     * <p>
+     * If the current directory is already the root, this method does nothing.
+     * </p>
      */
     public static void prevDir() {
         String[] parts = getPath().split(dirOps.getPathDelimiter());
