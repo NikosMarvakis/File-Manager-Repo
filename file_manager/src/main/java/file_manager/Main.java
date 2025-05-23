@@ -49,9 +49,10 @@ public class Main {
 	private static final InputUtils inputUtils = new InputUtils();
 	private static final PathUtils pathUtils = new PathUtils();
 
-	public static void main(String[] args) {		
+
+	public static void main(String[] args) {
 		// Show possible commands to choose from
-		inputUtils.getCommands();
+		InputUtils.getCommands();
 		System.out.println();
 		
 		// Initialize input handling
@@ -69,8 +70,18 @@ public class Main {
 	}
 
 	private static String getInput() {
-		System.out.print("Enter input (use '>' to give multiple input values at once): ");
-		return inputUtils.inputFunction();
+		String input;
+		while (true) {
+			System.out.print("Enter input (use '>' to give multiple input values at once): ");
+			input = InputUtils.inputFunction();
+			String command = input.split(">")[0].trim();
+			if (COMMANDS.containsValue(command) || command.equals(EXIT)) {
+				break;
+			} else {
+				System.out.println("Invalid command. Please enter a supported command.");
+			}
+		}
+		return input;
 	}
 
 	private static void processInput(String input, String[] padded_input) {
@@ -111,88 +122,88 @@ public class Main {
 		switch(commandCode) {
 			//shows the files in the given path
 			case "LIST":
-				directoryOperations.listDir();
+				DirectoryOperations.listDir();
 				break;
 
 			//shows the current path
 			case "PATH":
-				System.out.println(pathUtils.getPath());
+				System.out.println(PathUtils.getPath());
 				break;
 
 			//shows the available commands to choose from
 			case "INFO":
-				inputUtils.getCommands();
+				InputUtils.getCommands();
 				System.out.println();
 				break;
 
 			//change the current directory with another one
 			case "CHDIR":
-				pathUtils.changeDir(padded_input[1]);
+				PathUtils.changeDir(padded_input[1]);
 				break;
 
 			//go one directory outside
 			case "PREVDIR":
-				pathUtils.prevDir();
+				PathUtils.prevDir();
 				break;
 
 			//create a new file
 			case "MAKE_FILE":
-				fileOperations.newFile(padded_input[1]);
+				FileOperations.newFile(padded_input[1]);
 				break;
 
 			//delete a file
 			case "DELETE_FILE":
-				fileOperations.delFile(padded_input[1]);
+				FileOperations.delFile(padded_input[1]);
 				break;
 			
 			//rename a file
 			case "RENAME_FILE":
-				fileOperations.renameFile(padded_input[1], padded_input[2]);
+				FileOperations.renameFile(padded_input[1], padded_input[2]);
 				break;
 				
 			//read a file
 			case "READ_FILE":
-				fileOperations.readFile(padded_input[1]);
+				FileOperations.readFile(padded_input[1]);
 				break;
 				
 			//write into a file
 			case "WRITE_FILE":
-				fileOperations.writeFile(padded_input[1], padded_input[2]);
+				FileOperations.writeFile(padded_input[1], padded_input[2]);
 				break;
 				
 			//clear a file
 			case "CLEAR_FILE":
-				fileOperations.clearFile(padded_input[1]);
+				FileOperations.clearFile(padded_input[1]);
 				break;
 				
 			//copy a file
 			case "COPY_FILE":
-				fileOperations.copy(padded_input[1], padded_input[2]);
+				FileOperations.copy(padded_input[1], padded_input[2]);
 				break;
 				
 			//move a file
 			case "MOVE_FILE":
-				fileOperations.move(padded_input[1], padded_input[2]);
+				FileOperations.move(padded_input[1], padded_input[2]);
 				break;	
 				
 			//create a new directory (folder)
 			case "MAKE_DIR":
-				directoryOperations.newDir(padded_input[1], padded_input[2]);
+				DirectoryOperations.newDir(padded_input[1], padded_input[2]);
 				break;
 				
 			//delete a directory (folder)
 			case "DELETE_DIR":
-				directoryOperations.delDir(padded_input[1]);
+				DirectoryOperations.delDir(padded_input[1]);
 				break;
 				
 			//rename a directory / folder
 			case "RENAME_DIR":
-				directoryOperations.renameDir(padded_input[1], padded_input[2]);
+				DirectoryOperations.renameDir(padded_input[1], padded_input[2]);
 				break;
 				
 			//move a folder to another path / location
 			case "MOVE_DIR":
-				directoryOperations.moveDir(padded_input[1], padded_input[2]);
+				DirectoryOperations.moveDir(padded_input[1], padded_input[2]);
 				break;
 		}
 	}

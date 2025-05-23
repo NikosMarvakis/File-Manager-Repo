@@ -11,6 +11,7 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class InputUtils {
+    private static Scanner scan_obj = new Scanner(System.in); 
     
     /**
      * Reads a line of input from the user via the command line.
@@ -21,11 +22,8 @@ public class InputUtils {
      */
     public static String inputFunction() {
         //create scanner object
-        Scanner scan_obj = new Scanner(System.in); 
         //take the next line as input
         String user_input = scan_obj.nextLine();
-
-        scan_obj.close();
         
         return user_input;        
     }

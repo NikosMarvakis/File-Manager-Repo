@@ -15,7 +15,6 @@ import java.nio.file.Paths;
 
 import static file_manager.utils.InputUtils.inputFunction;
 import static file_manager.utils.PathUtils.getPath;
-
 /**
  * Utility class for handling file operations in the File Manager application.
  * This class provides comprehensive methods for managing files, including creating,
@@ -26,8 +25,8 @@ import static file_manager.utils.PathUtils.getPath;
  * @version 1.0
  */
 public class FileOperations {
-    
-    DirectoryOperations dir = new DirectoryOperations();
+
+    private static DirectoryOperations directoryInstance = new DirectoryOperations();
 
     /**
      * Creates a new file with the specified name in the current directory.
@@ -36,7 +35,7 @@ public class FileOperations {
      *
      * @param name The name of the file to create
      */
-    public static void newFile(String name) {
+     public static void newFile(String name) {
         //in case no name is given as a parameter
         if (name == null) {
             System.out.print("enter file name: ");
@@ -69,113 +68,124 @@ public class FileOperations {
      *
      * @param file_name The name of the file to clear
      */
-    public static void clearFile(String file_name) {
-        //if no value is given in parameter
+     public static void clearFile(String file_name) {
+        //in case no file name is given as a parameter
         if (file_name == null) {
-            System.out.print("Enter file name: ");
+            System.out.print("enter file name: ");
             file_name = inputFunction();
         }
-        
+
         try {
-            File file = new File(file_name);
-            if (file.exists() == true) {
-                //create buffered writer object
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file_name));
-                
-                //replace the contents with empty string 
-                writer.write("");
-                
-                //close writer object
-                writer.close();
+            //create new file object
+            File file1 = new File(getPath(), file_name);
+            
+            //if the file exists
+            if (file1.exists()) {
+                //create new file writer object
+                FileWriter fw = new FileWriter(file1);
+                //clear the file
+                fw.write("");
+                fw.close();
             }
+            //if the file doesnt exist
             else {
-                System.out.println("file not found");
+                System.out.println("file not existing");
             }
         }
         catch(Exception e) {
-            System.out.println("clearing file error");
+            System.out.println(e);
         }
     }
-    
+
     /**
      * Deletes a file after clearing its contents.
      * If no file name is provided, the user will be prompted to enter one.
-     * The method first clears the file's contents before deletion.
+     * The method verifies the file's existence before attempting to delete it.
      *
-     * @param name The name of the file to delete
-     * @return true if the file was successfully deleted, false otherwise
+     * @param file_name The name of the file to delete
      */
-    public static boolean delFile(String name) {
-        //if no name value is given as parameter
-        if (name == null) {
-            System.out.print("Enter input name: ");
-            name = inputFunction();
+     public static void delFile(String file_name) {
+        //in case no file name is given as a parameter
+        if (file_name == null) {
+            System.out.print("enter file name: ");
+            file_name = inputFunction();
         }
-        
-        //clear the file before deleting it
-        clearFile(name);
-        
-        //create a new file object
-        File f = new File(name);
-        
-        //if the got deleted
-        if (f.delete() == true) {
-            System.out.println("File deleted");
-            return true;
-        }
-        //if the file did not get deleted
-        else {
-            System.out.println("failed to delete file");
 
-            return false;
+        try {
+            //create new file object
+            File file1 = new File(getPath(), file_name);
+            
+            //if the file exists
+            if (file1.exists()) {
+                //clear the file
+                clearFile(file_name);
+                //delete the file
+                file1.delete();
+                System.out.println("file deleted");
+            }
+            //if the file doesnt exist
+            else {
+                System.out.println("file not existing");
+            }
+        }
+        catch(Exception e) {
+            System.out.println(e);
         }
     }
 
     /**
      * Renames a file to a new name.
-     * If either the current or new name is not provided, the user will be prompted to enter them.
-     * The method verifies the existence of the source file and checks for name conflicts.
+     * If either the source or target name is not provided, the user will be prompted to enter it.
+     * The method checks for the existence of both source and target files
+     * to prevent errors and duplicates.
      *
      * @param file_name The current name of the file
      * @param new_name The new name for the file
      */
-    public void renameFile(String file_name, String new_name) {
-        //if no file is given in parameters
-        if (file_name == null) {
-            System.out.print("Enter file name: ");
-            file_name = inputFunction();
-        }
-        
-        //if no new file name is given in parameters
-        if (new_name == null) {
-            System.out.print("Enter new file name: ");
-            new_name = inputFunction();
-        }
-        
-        //get the paths of the separate files  
-        String delimiter = dir.getPathDelimiter();
-        String start_path = getPath() + delimiter + file_name;
-        String end_path = getPath() + delimiter + new_name;
-        
-        //create file objects from the paths
-        File start_file = new File(start_path);
-        File end_file = new File(end_path);
-        
-        //if the file got renamed
-        if (start_file.renameTo(end_file) == true) {
-            System.out.println("file renamed");
-        }
-        
-        //if the file was not found
-        else {
-            System.out.println("file renaming failed");
-        }
+    public static void renameFile(String file_name, String new_name) {
+       //if no file is given in parameters
+       if (file_name == null) {
+          System.out.print("Enter file name: ");
+          file_name = inputFunction();
+       }
+
+       // check if the file exists before renaming
+    File start_file = new File(getPath(), file_name);
+    if (!start_file.exists() || !start_file.isFile()) {
+       System.out.println("file not existing");
+       return;
+    }
+       
+       //if no new file name is given in parameters
+       if (new_name == null) {
+          System.out.print("Enter new file name: ");
+          new_name = inputFunction();
+       }
+       
+       //get the paths of the separate files  
+       String start_path = getPath() + directoryInstance.getPathDelimiter() + file_name;
+       String end_path = getPath() + directoryInstance.getPathDelimiter() + new_name;
+       
+       //create file objects from the paths
+    //    File start_file = new File(start_path);
+       File end_file = new File(end_path);
+
+       
+       //if the file got renamed
+       if (start_file.renameTo(end_file) == true) {
+          System.out.println("file renamed");
+       }
+       
+       //if the file was not found
+       else {
+          System.out.println("file renaming failed");
+       }
     }
 
     /**
      * Reads and prints the contents of a file.
      * If no file name is provided, the user will be prompted to enter one.
-     * The method reads the file line by line and returns the contents as a string.
+     * The method verifies the file's existence before attempting to read it.
      *
      * @param file_name The name of the file to read
      * @return String containing the contents of the file
@@ -186,12 +196,15 @@ public class FileOperations {
         //if no file name is given as parameter
         if (file_name == null) {
             System.out.print("Enter file name: ");
+            file_name = inputFunction();
         }
         
+        File file = new File(getPath(), file_name);
+
         //if the file is found
         try {
             //create bufferReader object
-            BufferedReader reader = new BufferedReader(new FileReader(file_name));
+            BufferedReader reader = new BufferedReader(new FileReader(file));
             
             //while there are lines to read continue and read them
             String line;
@@ -222,18 +235,26 @@ public class FileOperations {
             System.out.print("Enter file name: ");
             file_name = inputFunction();
         }
-        
+
+        File file = new File(getPath(), file_name);
+
+        // Check if the file exists before proceeding
+        if (!file.exists()) {
+            System.out.println("file not existing");
+            return;
+        }
+
         if (text == null) {
             System.out.print("Enter text: ");
             text = inputFunction();
         }
-        
+
+
         int total_lines = 0;
 
         //count the number of lines in a file
         try {
-            //if the files exists
-            BufferedReader reader = new BufferedReader(new FileReader(file_name));
+            BufferedReader reader = new BufferedReader(new FileReader(file));
             while(reader.readLine() != null) {
                 total_lines++;
             }
@@ -241,21 +262,15 @@ public class FileOperations {
         }
         catch(Exception error){
         }
-        
-        try {
-            //create buffered writer object
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file_name, true));
 
-            //if the text input is the first input for the file
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+
             if (total_lines != 0) {
-                //write a new line
                 writer.newLine();
             }
 
-            //write into file
             writer.write(text);
-
-            //close writer object
             writer.close();
         }
         catch(IOException e) {
@@ -265,16 +280,15 @@ public class FileOperations {
 
     /**
      * Creates a copy of a file with automatic name conflict resolution.
-     * If no target name is provided, the method generates a unique name by appending a number.
-     * The method handles various file types and preserves the original file extension.
+     * If no source file name is provided, the user will be prompted to enter one.
+     * If no target file name is provided, the user will be prompted to enter one.
+     * The method handles file existence checks and name conflicts.
      *
-     * @param file_name_param The name of the file to copy
-     * @param new_name_param The desired name for the copy (optional)
-     * @return String containing the name of the created copy
-     * @throws FileNotFoundException if the source file cannot be found
-     * @throws InvalidPathException if the target path is invalid
+     * @param file_name_param The name of the source file to copy
+     * @param new_name_param The name of the target file to create
+     * @return The name of the created copy file, or null if the operation failed
      */
-    public String copy(String file_name_param, String new_name_param) {
+     public static String copy(String file_name_param, String new_name_param) {
         //in case no file name is given as a parameter
         if (file_name_param == null) {
             System.out.print("Enter file name: ");
@@ -283,7 +297,6 @@ public class FileOperations {
 
         //copy the new name to use as a object
         String new_name = new_name_param;
-        String delimiter = dir.getPathDelimiter();
         
         //in case no name is given for the copy file
         if (new_name_param == null){
@@ -318,7 +331,7 @@ public class FileOperations {
                 }
                 
                 //update the file object with the new file name (with the number at the end)
-                start_file_obj = new File(getPath() + delimiter + new_name);
+                start_file_obj = new File(getPath() + directoryInstance.getPathDelimiter() + new_name);
                 i++;
             }
         }
@@ -349,7 +362,7 @@ public class FileOperations {
             }
             
             //create file input stream object in order to be able to copy all types of files like images 
-            FileInputStream start_file = new FileInputStream(getPath() + delimiter + file_name_param);
+            FileInputStream start_file = new FileInputStream(getPath() + directoryInstance.getPathDelimiter() + file_name_param);
             FileOutputStream end_file = new FileOutputStream(end);
 
             //read contents of file and write them into the new file
@@ -381,45 +394,51 @@ public class FileOperations {
 
     /**
      * Moves a file to a new directory, handling name conflicts.
-     * If either the file name or target path is not provided, the user will be prompted to enter them.
-     * In case of name conflicts, the method creates a copy with a unique name.
+     * If no source file name is provided, the user will be prompted to enter one.
+     * If no target path is provided, the user will be prompted to enter one.
+     * The method preserves the original file name in the new location.
      *
-     * @param file_name The name of the file to move
-     * @param target_path The destination directory path
-     * @throws NoSuchFileException if the source file or target path does not exist
-     * @throws FileAlreadyExistsException if a file with the same name exists in the target directory
+     * @param source_file The name of the source file to move
+     * @param target_path The destination path where the file should be moved
      */
-    public void move(String file_name, String target_path) {
-        //if no file name value is given as parameter
-        if (file_name == null) {
-            System.out.print("Enter file name: ");
-            file_name = inputFunction();
-        }
-        
-        //if no path value is given as parameter
-        if (target_path == null) {
-            System.out.print("Enter path to move the file into: ");
-            target_path = inputFunction();
-        }
-        
-        String delimiter = dir.getPathDelimiter();
-        try {
-            //combine current file path with file name to get complete file path
-            String file_name_path = getPath() + delimiter + file_name;
-            
-            //create a path object and move files from starting path into target path
-            Files.move(Paths.get(file_name_path), Paths.get(target_path + delimiter + file_name));
-        }
-        catch(java.nio.file.NoSuchFileException nsfe) {
-            System.out.println("file or path not found error");
-        }
-        catch(java.nio.file.FileAlreadyExistsException faee) {
-            String file_copy_name = copy(file_name, null);
-            move(file_copy_name, target_path);
-            delFile(file_name);
-        }
-        catch(Exception e) {
-            System.out.println(e);
-        }
+    public static void move(String source_file, String target_path) {
+       //if no file name value is given as parameter
+       if (source_file == null) {
+          System.out.print("Enter file name: ");
+          source_file = inputFunction();
+       }
+       
+       // Check if source file exists before proceeding
+       File sourceFileObj = new File(getPath(), source_file);
+       if (!sourceFileObj.exists()) {
+          System.out.println("Source file does not exist.");
+          return;
+       }
+       
+       //in case no target path is given as a parameter
+       if (target_path == null) {
+          System.out.print("enter target path: ");
+          target_path = inputFunction();
+       }
+
+
+       try {
+          //combine current file path with file name to get complete file path
+          String file_name_path = getPath() + directoryInstance.getPathDelimiter() + source_file;
+          
+          //create a path object and move files from starting path into target path
+          Files.move(Paths.get(file_name_path), Paths.get(target_path + directoryInstance.getPathDelimiter() + source_file));
+       }
+       catch(java.nio.file.NoSuchFileException nsfe) {
+          System.out.println("file or path not found error");
+       }
+       catch(java.nio.file.FileAlreadyExistsException faee) {
+          String file_copy_name = copy(source_file, null);
+          move(file_copy_name, target_path);
+          delFile(source_file);
+       }
+       catch(Exception e) {
+          System.out.println(e);
+       }
     }
 } 
