@@ -15,7 +15,7 @@ import static file_manager.utils.PathUtils.getCurrentWorkingDirectory;
  * Provides methods for managing directories: listing, creating, deleting, renaming, and moving.
  *
  * @author Nikolaos Marvakis
- * @version 1.1
+ * @version 1.0
  */
 public class DirectoryOperations {
 
@@ -54,9 +54,14 @@ public class DirectoryOperations {
     }
 
     /**
-     * Creates a new directory at the specified path.
-     * @param directoryName The name of the directory to create. If null, prompts user for input.
-     * @return true if the directory was created successfully, false otherwise
+     * Creates a new directory with the specified name in the current working directory.
+     * <p>
+     * If {@code directoryName} is {@code null}, the user is prompted to enter a name.
+     * The method checks if a directory with the given name already exists; if not, it creates the directory.
+     * </p>
+     *
+     * @param directoryName the name of the new directory to create, or {@code null} to prompt the user for input
+     * @return {@code true} if the directory was created successfully, {@code false} if a directory with the same name already exists
      */
     public static boolean newDir(String directoryName) {
         DirectoryOperations directoryOperationsInstance = new DirectoryOperations();

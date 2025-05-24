@@ -19,6 +19,10 @@ import java.util.Scanner;
 public class InputUtils {
     private static final Scanner CONSOLE_SCANNER = new Scanner(System.in);
 
+    private InputUtils(){
+        // Private constructor to prevent instantiation
+    }
+
     /**
      * Reads a line of input from the user via the command line.
      * <p>

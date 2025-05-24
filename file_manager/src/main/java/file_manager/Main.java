@@ -8,9 +8,6 @@ import file_manager.utils.PathUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: javadoc newDir > creates a new directory at the specified path
-// TODO: make different constructors private to avoid creating them
-
 /**
  * The {@code Main} class is the entry point for the File Manager application.
  * It provides a command-line interface for users to manage files and directories.
@@ -37,26 +34,6 @@ public class Main {
 	 * This map is used to validate user input and dispatch commands.
 	 */
 	private static final Map<String, String> COMMAND_CODE_TO_STRING_MAP = createCommandMap();
-
-	/**
-	 * An instance of {@link DirectoryOperations} for performing directory operations.
-	 */
-	private static final DirectoryOperations directoryOperationsInstance = new DirectoryOperations();
-
-	/**
-	 * An instance of {@link FileOperations} for performing file operations.
-	 */
-	private static final FileOperations fileOperationsInstance = new FileOperations();
-
-	/**
-	 * An instance of {@link InputUtils} for handling user input.
-	 */
-	private static final InputUtils inputUtilsInstance = new InputUtils();
-
-	/**
-	 * An instance of {@link PathUtils} for handling file paths.
-	 */
-	private static final PathUtils pathUtilsInstance = new PathUtils();
 
 	/**
 	 * The main method that serves as the application's entry point.

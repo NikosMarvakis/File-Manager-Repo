@@ -24,6 +24,10 @@ import static file_manager.utils.PathUtils.getCurrentWorkingDirectory;
  */
 public class FileOperations {
 
+    private FileOperations() {
+        // Private constructor to prevent instantiation
+    }
+
     private static final DirectoryOperations directoryOperationsInstance = new DirectoryOperations();
 
     /**

@@ -30,6 +30,10 @@ import file_manager.operations.DirectoryOperations;
 public class PathUtils {
     private static final DirectoryOperations directoryOperations = new DirectoryOperations();
 
+    private PathUtils() {
+        // Private constructor to prevent instantiation
+    }
+
     /**
      * Retrieves the absolute path of the current working directory.
      *
