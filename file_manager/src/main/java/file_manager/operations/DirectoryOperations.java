@@ -26,7 +26,7 @@ public class DirectoryOperations {
      */
     public DirectoryOperations() {
         String operatingSystemName = System.getProperty("os.name").toLowerCase();
-        osPathDelimiter = operatingSystemName.contains("win") ? "\\" : "/";
+        osPathDelimiter = operatingSystemName.contains("win") ? "\\\\" : "/";
     }
 
     /**
