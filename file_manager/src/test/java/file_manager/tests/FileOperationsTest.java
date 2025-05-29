@@ -1,13 +1,17 @@
 package file_manager.tests;
 
-import file_manager.operations.FileOperations;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import java.io.File;
 import java.nio.file.Files;
+
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+
+import file_manager.operations.FileOperations;
 import static file_manager.utils.PathUtils.getCurrentWorkingDirectory;
-import static org.junit.Assert.*;
 
 public class FileOperationsTest {
 
@@ -67,7 +71,7 @@ public class FileOperationsTest {
         File file = new File(getCurrentWorkingDirectory(), testFileName);
         try {
             file.createNewFile();
-        } catch (Exception ignored) {}
+        } catch (java.io.IOException | SecurityException ignored) {}
         FileOperations.newFile(testFileName);
         assertTrue(file.exists());
     }
@@ -177,7 +181,7 @@ public class FileOperationsTest {
         Files.write(file.toPath(), "MoveMe".getBytes());
         File dir = new File(getCurrentWorkingDirectory(), testDir);
         dir.mkdir();
-        FileOperations.move(testFileMove, dir.getAbsolutePath());
+        FileOperations.moveFile(testFileMove, dir.getAbsolutePath());
         File moved = new File(dir, testFileMove);
         assertTrue(moved.exists());
         assertFalse(file.exists());
@@ -187,7 +191,7 @@ public class FileOperationsTest {
     public void testMoveFileNonExistent() {
         File dir = new File(getCurrentWorkingDirectory(), testDir);
         dir.mkdir();
-        FileOperations.move("nonexistent.txt", dir.getAbsolutePath());
+        FileOperations.moveFile("nonexistent.txt", dir.getAbsolutePath());
         File moved = new File(dir, "nonexistent.txt");
         assertFalse(moved.exists());
     }

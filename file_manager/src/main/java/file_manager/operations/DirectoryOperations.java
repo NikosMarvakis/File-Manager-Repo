@@ -118,9 +118,9 @@ public class DirectoryOperations {
 
             String[] directoryContents = directoryToDelete.list();
             if (directoryContents != null && directoryContents.length > 0) {
-                if(autoConfirmString == "n"){
+                if(autoConfirmString.equals("n")){
                     String userConfirmation = readUserInput("Warning: The folder is not empty. Do you want to delete it and all its contents? (Y/N): ");
-                    if (!userConfirmation.equalsIgnoreCase("Y")) {
+                    if (!userConfirmation.equalsIgnoreCase("y")) {
                         System.out.println("Folder deletion cancelled by user.");
                         return false;
                     }
@@ -180,8 +180,14 @@ public class DirectoryOperations {
         try {
             Files.move(sourceDirectoryFile.toPath(), targetDirectoryFile.toPath());
             System.out.println("Folder renamed successfully.");
-        } catch (Exception e) {
-            System.out.println("An error occurred while renaming the folder: " + e);
+        } catch (NoSuchFileException nsfe) {
+            System.out.println("Error: Source or destination path not found.");
+        } catch (FileAlreadyExistsException faee) {
+            System.out.println("Error: A folder with the new name already exists.");
+        } catch (SecurityException se) {
+            System.out.println("Error: Permission denied while renaming the folder.");
+        } catch (java.io.IOException ioe) {
+            System.out.println("An I/O error occurred while renaming the folder: " + ioe);
         }
     }
 
@@ -220,8 +226,10 @@ public class DirectoryOperations {
             System.out.println("Error: Destination path not found.");
         } catch (FileAlreadyExistsException faee) {
             System.out.println("Error: A folder with the same name already exists at the destination.");
-        } catch (Exception e) {
-            System.out.println("An error occurred while moving the folder: " + e);
+        } catch (SecurityException se) {
+            System.out.println("Error: Permission denied while moving the folder.");
+        } catch (java.io.IOException ioe) {
+            System.out.println("An I/O error occurred while moving the folder: " + ioe);
         }
     }
 

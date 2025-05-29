@@ -1,5 +1,4 @@
+file_manager\operations\FileOperations.class
 file_manager\utils\InputUtils.class
 file_manager\Main.class
 file_manager\utils\PathUtils.class
-file_manager\operations\directoryInstance.class
-file_manager\operations\FileOperations.class

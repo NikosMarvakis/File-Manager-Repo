@@ -1,9 +1,12 @@
 package file_manager.tests;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
 import file_manager.operations.DirectoryOperations;
 import file_manager.utils.PathUtils;
 
@@ -32,7 +35,7 @@ public class DirectoryOperationsTest {
         try {
             dir.mkdir();
             assertTrue("Directory should exist before deletion", dir.exists());
-            assertTrue("Directory should be deleted", DirectoryOperations.delDir(dir.getAbsolutePath(), "y"));
+            assertTrue("Directory should be deleted", DirectoryOperations.delDir(dir.getName(), "y"));
             assertFalse("Directory should not exist after deletion", dir.exists());
         } finally {
             dir.delete();
@@ -121,7 +124,7 @@ public class DirectoryOperationsTest {
             dir.mkdir();
             parent.mkdir();
             assertTrue("Source directory should exist", dir.exists());
-            DirectoryOperations.moveDir(dir.getAbsolutePath(), parent.getAbsolutePath());
+            DirectoryOperations.moveDir(dir.getName(), parent.getAbsolutePath());
             assertFalse("Source directory should not exist after move", dir.exists());
             assertTrue("Directory should exist in new location", moved.exists());
         } finally {

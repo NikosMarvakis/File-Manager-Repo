@@ -188,7 +188,7 @@ public class Main {
 				break;
 			case "MOVE_FILE":
 				System.out.println("Moving file...");
-				FileOperations.move(parsedUserInputArguments[1], parsedUserInputArguments[2]);
+				FileOperations.moveFile(parsedUserInputArguments[1], parsedUserInputArguments[2]);
 				break;
 			case "MAKE_DIR":
 				System.out.println("Creating new directory...");

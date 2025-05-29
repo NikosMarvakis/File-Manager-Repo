@@ -1,6 +1,14 @@
 package file_manager.operations;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
@@ -46,7 +54,7 @@ public class FileOperations {
             } else {
                 System.out.println("A file with this name already exists: " + fileNameToCreate);
             }
-        } catch (Exception exception) {
+        } catch (IOException | SecurityException exception) {
             System.out.println("Error creating file: " + exception.getMessage());
         }
     }
@@ -68,7 +76,7 @@ public class FileOperations {
         try (FileWriter fileWriter = new FileWriter(fileToClear)) {
             fileWriter.write("");
             System.out.println("File cleared successfully: " + fileNameToClear);
-        } catch (Exception exception) {
+        } catch (IOException | SecurityException exception) {
             System.out.println("Error clearing file: " + exception.getMessage());
         }
     }
@@ -135,7 +143,7 @@ public class FileOperations {
                 System.out.println(currentLine);
                 fileContentsBuilder.append(currentLine);
             }
-        } catch (Exception exception) {
+        } catch (IOException | SecurityException exception) {
             System.out.println("Unable to read file. File not found: " + fileNameToRead);
         }
         return fileContentsBuilder.toString();
@@ -188,7 +196,7 @@ public class FileOperations {
                 destinationFile.createNewFile();
             } catch (InvalidPathException invalidPathException) {
                 System.out.println("Invalid path specified for the destination file.");
-            } catch (Exception exception) {
+            } catch (IOException | SecurityException exception) {
                 System.out.println("A file with the destination name already exists: " + destinationFileName);
             }
         }
@@ -196,7 +204,7 @@ public class FileOperations {
             File destinationFile = new File(getCurrentWorkingDirectory(), generatedDestinationName);
             try {
                 destinationFile.createNewFile();
-            } catch (Exception exception) {
+            } catch (IOException | SecurityException exception) {
                 System.out.println("A file with the generated name already exists: " + generatedDestinationName);
             }
             try (FileInputStream fileInputStream = new FileInputStream(new File(getCurrentWorkingDirectory(), sourceFileName));
@@ -208,11 +216,9 @@ public class FileOperations {
                 renameFile(generatedDestinationName, destinationFileName);
             }
             System.out.println("File copied successfully to: " + generatedDestinationName);
-        } catch (FileNotFoundException fileNotFoundException) {
+        } catch (FileNotFoundException | NullPointerException exception) {
             System.out.println("Source file not found: " + sourceFileName);
-        } catch (NullPointerException nullPointerException) {
-            System.out.println("Source file not found: " + sourceFileName);
-        } catch (Exception exception) {
+        } catch (IOException | SecurityException exception) {
             System.out.println("Error copying file: " + exception.getMessage());
         }
         return generatedDestinationName;
@@ -227,7 +233,7 @@ public class FileOperations {
      * @param sourceFileNameToMove         the name of the file to move, or null to prompt the user
      * @param destinationDirectoryPath the destination directory path, or null to prompt the user
      */
-    public static void move(String sourceFileNameToMove, String destinationDirectoryPath) {
+    public static void moveFile(String sourceFileNameToMove, String destinationDirectoryPath) {
         sourceFileNameToMove = promptIfNull(sourceFileNameToMove, "Please enter the name of the file to move: ");
         File sourceFileToMove = new File(getCurrentWorkingDirectory(), sourceFileNameToMove);
         if (!sourceFileToMove.exists()) {
@@ -246,9 +252,9 @@ public class FileOperations {
         } catch (java.nio.file.FileAlreadyExistsException fileAlreadyExistsException) {
             System.out.println("A file with the same name already exists at the destination. Overwriting...");
             String copiedFileName = copy(sourceFileNameToMove, null);
-            move(copiedFileName, destinationDirectoryPath);
+            moveFile(copiedFileName, destinationDirectoryPath);
             delFile(sourceFileNameToMove);
-        } catch (Exception exception) {
+        } catch (IOException | SecurityException exception) {
             System.out.println("Error moving file: " + exception.getMessage());
         }
     }

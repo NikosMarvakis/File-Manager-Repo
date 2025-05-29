@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="file_manager.tests.FileOperationsTest" time="0.401" tests="16" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="file_manager.tests.DirectoryOperationsTest" time="0.219" tests="8" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="23"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,9 +15,9 @@
     <property name="user.country" value="DE"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-23\bin"/>
-    <property name="sun.java.command" value="C:\Users\nikpo\AppData\Local\Temp\surefire1476714923446260204\surefirebooter-20250529093531065_3.jar C:\Users\nikpo\AppData\Local\Temp\surefire1476714923446260204 2025-05-29T09-35-30_329-jvmRun1 surefire-20250529093531065_1tmp surefire_0-20250529093531065_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\nikpo\AppData\Local\Temp\surefire17007928043118940677\surefirebooter-20250529102729080_3.jar C:\Users\nikpo\AppData\Local\Temp\surefire17007928043118940677 2025-05-29T10-27-28_807-jvmRun1 surefire-20250529102729080_1tmp surefire_0-20250529102729080_2tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="test" value="file_manager.tests.FileOperationsTest"/>
+    <property name="test" value="file_manager.tests.DirectoryOperationsTest"/>
     <property name="surefire.test.class.path" value="C:\Users\nikpo\Desktop\IU folder\programming folder\java OOP 2\File-Manager-Repo\File-Manager-Repo\file_manager\target\test-classes;C:\Users\nikpo\Desktop\IU folder\programming folder\java OOP 2\File-Manager-Repo\File-Manager-Repo\file_manager\target\classes;C:\Users\nikpo\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\nikpo\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\nikpo"/>
@@ -31,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\nikpo\AppData\Local\Temp\surefire1476714923446260204\surefirebooter-20250529093531065_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\nikpo\AppData\Local\Temp\surefire17007928043118940677\surefirebooter-20250529102729080_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="23+37-2369"/>
@@ -60,72 +60,37 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="67.0"/>
   </properties>
-  <testcase name="testRenameFile" classname="file_manager.tests.FileOperationsTest" time="0.049">
-    <system-out><![CDATA[File renamed successfully to: testFile2.txt
+  <testcase name="testRenameDir" classname="file_manager.tests.DirectoryOperationsTest" time="0.044">
+    <system-out><![CDATA[Folder renamed successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testRenameFileNonExistent" classname="file_manager.tests.FileOperationsTest" time="0.002">
-    <system-out><![CDATA[The specified file does not exist: nonexistent.txt
+  <testcase name="testDelNonEmptyDir" classname="file_manager.tests.DirectoryOperationsTest" time="0.001">
+    <system-out><![CDATA[Error: The specified folder does not exist or is not a directory.
 ]]></system-out>
   </testcase>
-  <testcase name="testCopyFileNonExistent" classname="file_manager.tests.FileOperationsTest" time="0.009">
-    <system-out><![CDATA[Source file not found: nonexistent.txt
+  <testcase name="testMoveDirToExisting" classname="file_manager.tests.DirectoryOperationsTest" time="0.006">
+    <system-out><![CDATA[Error: The folder you want to move does not exist or is not a directory.
 ]]></system-out>
   </testcase>
-  <testcase name="testDelFileNonExistent" classname="file_manager.tests.FileOperationsTest" time="0.002">
-    <system-out><![CDATA[The specified file does not exist: nonexistent.txt
+  <testcase name="testRenameDirToExisting" classname="file_manager.tests.DirectoryOperationsTest" time="0.002">
+    <system-out><![CDATA[Error: A folder with the new name already exists. Please choose a different name.
 ]]></system-out>
   </testcase>
-  <testcase name="testReadFileNonExistent" classname="file_manager.tests.FileOperationsTest" time="0.001">
-    <system-out><![CDATA[Unable to read file. File not found: nonexistent.txt
+  <testcase name="testMoveDir" classname="file_manager.tests.DirectoryOperationsTest" time="0.002">
+    <system-out><![CDATA[Folder moved successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testWriteFile" classname="file_manager.tests.FileOperationsTest" time="0.017">
-    <system-out><![CDATA[Text appended successfully to file: testFile.txt
+  <testcase name="testDelNonExistentDir" classname="file_manager.tests.DirectoryOperationsTest" time="0.005">
+    <system-out><![CDATA[Error: The specified folder does not exist or is not a directory.
 ]]></system-out>
   </testcase>
-  <testcase name="testClearFile" classname="file_manager.tests.FileOperationsTest" time="0.008">
-    <system-out><![CDATA[File cleared successfully: testFile.txt
+  <testcase name="testDelEmptyDir" classname="file_manager.tests.DirectoryOperationsTest" time="0.004">
+    <system-out><![CDATA[Folder deleted successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testNewFileCreatesFile" classname="file_manager.tests.FileOperationsTest" time="0.002">
-    <system-out><![CDATA[File created successfully: testFile.txt
-]]></system-out>
-  </testcase>
-  <testcase name="testClearFileNonExistent" classname="file_manager.tests.FileOperationsTest" time="0.0">
-    <system-out><![CDATA[The specified file does not exist: nonexistent.txt
-]]></system-out>
-  </testcase>
-  <testcase name="testMoveFileNonExistent" classname="file_manager.tests.FileOperationsTest" time="0.0">
-    <system-out><![CDATA[The specified source file does not exist: nonexistent.txt
-]]></system-out>
-  </testcase>
-  <testcase name="testReadFile" classname="file_manager.tests.FileOperationsTest" time="0.033">
-    <system-out><![CDATA[Contents of testFile.txt:
-Hello
-World
-]]></system-out>
-  </testcase>
-  <testcase name="testNewFileAlreadyExists" classname="file_manager.tests.FileOperationsTest" time="0.002">
-    <system-out><![CDATA[A file with this name already exists: testFile.txt
-]]></system-out>
-  </testcase>
-  <testcase name="testCopyFile" classname="file_manager.tests.FileOperationsTest" time="0.003">
-    <system-out><![CDATA[File renamed successfully to: testFileCopy.txt
-File copied successfully to: testFileCopy.txt
-]]></system-out>
-  </testcase>
-  <testcase name="testMoveFile" classname="file_manager.tests.FileOperationsTest" time="0.042">
-    <system-out><![CDATA[File moved successfully to: C:\Users\nikpo\Desktop\IU folder\programming folder\java OOP 2\File-Manager-Repo\File-Manager-Repo\file_manager\testDir
-]]></system-out>
-  </testcase>
-  <testcase name="testDelFile" classname="file_manager.tests.FileOperationsTest" time="0.005">
-    <system-out><![CDATA[File cleared successfully: testFile.txt
-File deleted successfully: testFile.txt
-]]></system-out>
-  </testcase>
-  <testcase name="testWriteFileNonExistent" classname="file_manager.tests.FileOperationsTest" time="0.011">
-    <system-out><![CDATA[The specified file does not exist: nonexistent.txt
+  <testcase name="testNewDir" classname="file_manager.tests.DirectoryOperationsTest" time="0.023">
+    <system-out><![CDATA[Folder 'testNewDir' created successfully.
+A folder with this name already exists. Please choose a different name.
 ]]></system-out>
   </testcase>
 </testsuite>
